@@ -1,18 +1,29 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+
+import Spinner from "@/components/Spinner";
+
+type MemojiScrubberProps = {
+  onLoaded?: () => void;
+  displayMemoji: boolean;
+};
 
 const TOTAL_FRAMES = 168;
 const FRAME_PATH = "/memoji-frames/frame-";
 
-export default function MemojiScrubberPolarCanvas() {
-  // Set default frame (zero-indexed 130 corresponds to frame 131)
+export default function MemojiScrubber({
+  onLoaded,
+  displayMemoji,
+}: MemojiScrubberProps) {
+  // Default frame (zero-indexed 130 corresponds to frame 131)
   const [currentFrame, setCurrentFrame] = useState(130);
   const [targetFrame, setTargetFrame] = useState(130);
   const [allFramesLoaded, setAllFramesLoaded] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
 
-  // Preload all images and store them in imagesRef.current.
+  // Preload all images and store them in imagesRef.
   useEffect(() => {
     const images: HTMLImageElement[] = [];
     const promises = [];
@@ -33,7 +44,8 @@ export default function MemojiScrubberPolarCanvas() {
       .then(() => {
         imagesRef.current = images;
         setAllFramesLoaded(true);
-        // Draw initial frame.
+        if (onLoaded) onLoaded();
+        // Draw the initial frame.
         const canvas = canvasRef.current;
         if (canvas) {
           const ctx = canvas.getContext("2d");
@@ -44,7 +56,7 @@ export default function MemojiScrubberPolarCanvas() {
         }
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [onLoaded]);
 
   // Animation loop: smoothly interpolate currentFrame toward targetFrame using the shortest path.
   useEffect(() => {
@@ -52,12 +64,10 @@ export default function MemojiScrubberPolarCanvas() {
     const animate = () => {
       setCurrentFrame((prev) => {
         let diff = targetFrame - prev;
-        // Adjust diff to take the shortest circular route.
         if (diff > TOTAL_FRAMES / 2) diff -= TOTAL_FRAMES;
         else if (diff < -TOTAL_FRAMES / 2) diff += TOTAL_FRAMES;
         if (Math.abs(diff) < 0.01) return targetFrame;
         let newFrame = prev + diff * 0.1;
-        // Ensure newFrame stays within bounds.
         newFrame = ((newFrame % TOTAL_FRAMES) + TOTAL_FRAMES) % TOTAL_FRAMES;
         return newFrame;
       });
@@ -74,7 +84,6 @@ export default function MemojiScrubberPolarCanvas() {
       const centerY = window.innerHeight / 2;
       const dx = clientX - centerX;
       const dy = clientY - centerY;
-      // Standard atan2 gives 0 rad when pointing right; subtract π to set 0º to the left.
       let angle = Math.atan2(dy, dx) - Math.PI;
       if (angle < 0) angle += 2 * Math.PI;
       const degrees = angle * (180 / Math.PI);
@@ -83,14 +92,13 @@ export default function MemojiScrubberPolarCanvas() {
       setTargetFrame(frame);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent) =>
       updateFrame(e.clientX, e.clientY);
-    };
     const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length) {
+      if (e.touches.length)
         updateFrame(e.touches[0].clientX, e.touches[0].clientY);
-      }
     };
+
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("touchmove", handleTouchMove);
     return () => {
@@ -101,7 +109,6 @@ export default function MemojiScrubberPolarCanvas() {
 
   // Redraw the canvas whenever currentFrame updates.
   useEffect(() => {
-    if (!allFramesLoaded) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -112,19 +119,30 @@ export default function MemojiScrubberPolarCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     }
-  }, [currentFrame, allFramesLoaded]);
+  }, [currentFrame]);
 
+  // Render: always reserve a 220×220 container.
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
-      {!allFramesLoaded ? (
-        <div className="text-white text-xl">Loading...</div>
+    <div className="relative" style={{ width: 220, height: 220 }}>
+      {displayMemoji ? (
+        allFramesLoaded ? (
+          <motion.canvas
+            ref={canvasRef}
+            width={220}
+            height={220}
+            className="select-none"
+            initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-white">
+            <Spinner />
+          </div>
+        )
       ) : (
-        <canvas
-          ref={canvasRef}
-          width={220} // Adjust these dimensions as needed.
-          height={220}
-          className="select-none"
-        />
+        // Before text is complete, reserve space (render empty container)
+        <div className="w-full h-full" />
       )}
     </div>
   );
