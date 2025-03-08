@@ -33,7 +33,9 @@ export default function IntroBox({
 
         timeoutId = setTimeout(typeNext, delay);
       } else {
-        onComplete?.();
+        timeoutId = setTimeout(() => {
+          onComplete?.();
+        }, 500);
       }
     }
 

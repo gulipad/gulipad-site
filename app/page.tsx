@@ -47,18 +47,64 @@ export default function Home() {
           displayMemoji={introComplete}
         />
       </div>
-
-      {/* CategoryCard: floating 45 degrees from center, 20vh away, 1s delay */}
       <CategoryCard
-        title="My Craft"
+        title="Github"
+        emoji="github"
+        onClick={() => alert("Clicked My Craft!")}
+        angle={180}
+        distance={40}
+        isVisible={showCard}
+        delay={200}
+        primaryColor="255,99,71"
+        secondaryColor="255,127,80"
+      />
+      <CategoryCard
+        title="Projects"
         emoji="hammer-and-wrench"
-        description="All about coding & tech"
+        onClick={() => alert("Clicked My Craft!")}
+        angle={270}
+        distance={40}
+        isVisible={showCard}
+        delay={600}
+        primaryColor="0,123,255"
+        secondaryColor="0,200,255"
+      />
+      <CategoryCard
+        title="About me"
+        emoji="book"
+        onClick={() => alert("Clicked My Craft!")}
+        angle={320}
+        distance={45}
+        isVisible={showCard}
+        delay={800}
+        primaryColor="34,139,34"
+        secondaryColor="50,205,50"
+      />
+      <CategoryCard
+        title="X"
+        emoji="x"
         onClick={() => alert("Clicked My Craft!")}
         angle={0}
-        distance={30}
+        distance={35}
         isVisible={showCard}
-        delay={1} // 1 second after showCard => pop in
+        delay={1000}
+        primaryColor="255,0,150"
+        secondaryColor="0,255,255"
       />
+      <CategoryCard
+        title="Interests"
+        emoji="thinking"
+        onClick={() => alert("Clicked My Craft!")}
+        angle={220}
+        distance={50}
+        isVisible={showCard}
+        delay={400}
+        primaryColor="138,43,226"
+        secondaryColor="186,85,211"
+      />
+      <footer className="absolute bottom-4 text-white text-sm">
+        Made with ❤️ in Madrid by Gulipad
+      </footer>
     </main>
   );
 }
