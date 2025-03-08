@@ -192,7 +192,10 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="absolute bottom-4 text-white text-sm">
+      <div className="absolute bottom-12 w-full text-center text-gray-400 text-xs md:hidden">
+        Drag along to make Guli follow you.
+      </div>
+      <footer className="absolute bottom-4 text-white text-s">
         Made with ❤️ in Madrid by Gulipad
       </footer>
     </main>
