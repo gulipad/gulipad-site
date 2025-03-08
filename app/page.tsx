@@ -68,7 +68,7 @@ export default function Home() {
           title: "Github",
           emoji: "github",
           angle: 245,
-          distance: 42,
+          distance: 45,
           delay: 200,
           primaryColor: "255,99,71",
           secondaryColor: "255,127,80",
@@ -76,8 +76,8 @@ export default function Home() {
         {
           title: "Projects",
           emoji: "hammer-and-wrench",
-          angle: 285,
-          distance: 40,
+          angle: 280,
+          distance: 42,
           delay: 600,
           primaryColor: "0,123,255",
           secondaryColor: "0,200,255",
@@ -85,7 +85,7 @@ export default function Home() {
         {
           title: "About me",
           emoji: "book",
-          angle: 40,
+          angle: 25,
           distance: 12,
           delay: 800,
           primaryColor: "34,139,34",
@@ -201,7 +201,7 @@ export default function Home() {
       <div
         className={`
           relative 
-          ${isMobile ? "absolute bottom-24 w-full" : ""}
+          ${isMobile ? "absolute bottom-22 w-full" : ""}
           flex flex-col items-center justify-center
         `}
       >
@@ -221,6 +221,12 @@ export default function Home() {
           />
         </div>
       </div>
+
+      {isMobile && (
+        <div className="absolute bottom-12 w-full text-center text-gray-500 text-xs">
+          Drag your finger around and Guli will follow.
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="absolute bottom-4 text-white text-sm">
