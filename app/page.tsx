@@ -10,6 +10,7 @@ export default function Home() {
   const [memojiLoaded, setMemojiLoaded] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [activePanel, setActivePanel] = useState<string | null>(null);
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Check for mobile screen size on mount and window resize
@@ -67,6 +68,7 @@ export default function Home() {
         {
           title: "Github",
           emoji: "github",
+          linkUrl: "https://github.com/gulipad",
           angle: 245,
           distance: 45,
           delay: 200,
@@ -76,6 +78,8 @@ export default function Home() {
         {
           title: "Projects",
           emoji: "hammer-and-wrench",
+          onClick: () =>
+            setActivePanel((prev) => (prev === "Projects" ? null : "Projects")),
           angle: 280,
           distance: 42,
           delay: 600,
@@ -85,6 +89,8 @@ export default function Home() {
         {
           title: "About me",
           emoji: "book",
+          onClick: () =>
+            setActivePanel((prev) => (prev === "About" ? null : "About")),
           angle: 25,
           distance: 12,
           delay: 800,
@@ -94,6 +100,7 @@ export default function Home() {
         {
           title: "X",
           emoji: "x",
+          linkUrl: "https://x.com/GuliMoreno",
           angle: 110,
           distance: 15,
           delay: 1000,
@@ -103,6 +110,10 @@ export default function Home() {
         {
           title: "Interests",
           emoji: "thinking",
+          onClick: () =>
+            setActivePanel((prev) =>
+              prev === "Interests" ? null : "Interests"
+            ),
           angle: 170,
           distance: 20,
           delay: 30,
@@ -116,6 +127,7 @@ export default function Home() {
         {
           title: "Github",
           emoji: "github",
+          linkUrl: "https://github.com/gulipad",
           angle: 180,
           distance: 40,
           delay: 200,
@@ -125,6 +137,8 @@ export default function Home() {
         {
           title: "Projects",
           emoji: "hammer-and-wrench",
+          onClick: () =>
+            setActivePanel((prev) => (prev === "Projects" ? null : "Projects")),
           angle: 270,
           distance: 40,
           delay: 600,
@@ -134,6 +148,8 @@ export default function Home() {
         {
           title: "About me",
           emoji: "book",
+          onClick: () =>
+            setActivePanel((prev) => (prev === "About" ? null : "About")),
           angle: 320,
           distance: 45,
           delay: 800,
@@ -143,6 +159,7 @@ export default function Home() {
         {
           title: "X",
           emoji: "x",
+          linkUrl: "https://x.com/gulipad",
           angle: 0,
           distance: 35,
           delay: 1000,
@@ -152,6 +169,10 @@ export default function Home() {
         {
           title: "Interests",
           emoji: "thinking",
+          onClick: () =>
+            setActivePanel((prev) =>
+              prev === "Interests" ? null : "Interests"
+            ),
           angle: 220,
           distance: 50,
           delay: 400,
@@ -186,7 +207,8 @@ export default function Home() {
           key={config.title}
           title={config.title}
           emoji={config.emoji}
-          onClick={() => alert(`Clicked ${config.title}!`)}
+          onClick={config.onClick}
+          linkUrl={config.linkUrl}
           angle={config.angle}
           distance={config.distance}
           isVisible={showCard}
@@ -201,7 +223,7 @@ export default function Home() {
       <div
         className={`
           relative 
-          ${isMobile ? "absolute bottom-22 w-full" : ""}
+          ${isMobile ? "absolute bottom-24 w-full" : ""}
           flex flex-col items-center justify-center
         `}
       >
@@ -222,9 +244,106 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Content panels that appear when cards are clicked */}
+      {/* Projects Panel */}
+      <motion.div
+        className="absolute bg-black bg-opacity-90 text-white p-6 rounded-lg border border-gray-700 max-w-md z-10"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: activePanel === "Projects" ? 1 : 0,
+          scale: activePanel === "Projects" ? 1 : 0.8,
+          display: activePanel === "Projects" ? "block" : "none",
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">My Projects</h2>
+          <button
+            onClick={() => setActivePanel(null)}
+            className="text-gray-400 hover:text-white"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="space-y-3">
+          <p>Here are some of my recent projects:</p>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Personal portfolio website</li>
+            <li>AI-powered content generator</li>
+            <li>React component library</li>
+            <li>Mobile app for tracking habits</li>
+          </ul>
+        </div>
+      </motion.div>
+
+      {/* About Me Panel */}
+      <motion.div
+        className="absolute bg-black bg-opacity-90 text-white p-6 rounded-lg border border-gray-700 max-w-md z-10"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: activePanel === "About" ? 1 : 0,
+          scale: activePanel === "About" ? 1 : 0.8,
+          display: activePanel === "About" ? "block" : "none",
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">About Me</h2>
+          <button
+            onClick={() => setActivePanel(null)}
+            className="text-gray-400 hover:text-white"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="space-y-3">
+          <p>
+            Hi, I'm Guli! I'm a front-end developer based in Madrid with a
+            passion for creating beautiful, intuitive user interfaces.
+          </p>
+          <p>
+            I specialize in React, TypeScript, and modern web technologies. When
+            I'm not coding, you can find me exploring the city or trying out new
+            recipes.
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Interests Panel */}
+      <motion.div
+        className="absolute bg-black bg-opacity-90 text-white p-6 rounded-lg border border-gray-700 max-w-md z-10"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: activePanel === "Interests" ? 1 : 0,
+          scale: activePanel === "Interests" ? 1 : 0.8,
+          display: activePanel === "Interests" ? "block" : "none",
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">My Interests</h2>
+          <button
+            onClick={() => setActivePanel(null)}
+            className="text-gray-400 hover:text-white"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="space-y-3">
+          <p>Some things that fascinate me:</p>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Web3 and blockchain technology</li>
+            <li>UI/UX design principles</li>
+            <li>Machine learning and AI</li>
+            <li>Photography and visual arts</li>
+            <li>Electronic music production</li>
+          </ul>
+        </div>
+      </motion.div>
+
       {isMobile && (
         <div className="absolute bottom-12 w-full text-center text-gray-500 text-xs">
-          Drag your finger around and Guli will follow.
+          This site is better experienced on desktop.
         </div>
       )}
 

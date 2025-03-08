@@ -1,11 +1,15 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "motion/react";
+import { ExternalLink } from "lucide-react"; // Import the external link icon from lucide
 
 type CategoryCardProps = {
   title: string;
   emoji: string;
-  onClick?: () => void;
+
+  // Two options for click behavior:
+  onClick?: () => void; // Function to execute (like showing components)
+  linkUrl?: string; // URL to open in new tab
 
   angle?: number; // in degrees
   distance?: number; // in vh
@@ -20,6 +24,7 @@ export default function CategoryCard({
   title,
   emoji,
   onClick,
+  linkUrl,
   angle = 0,
   distance = 0,
   isVisible = false,
@@ -62,6 +67,15 @@ export default function CategoryCard({
   // Decide which shadow & scale to apply based on hover
   const boxShadow = hover ? hoverShadow : nonHoverShadow;
   const scale = hover ? 1.1 : 1.05;
+
+  // Handle click based on whether linkUrl or onClick is provided
+  const handleClick = () => {
+    if (linkUrl) {
+      window.open(linkUrl, "_blank", "noopener,noreferrer");
+    } else if (onClick) {
+      onClick();
+    }
+  };
 
   return (
     <motion.div
@@ -111,13 +125,14 @@ export default function CategoryCard({
         - rely on onMouseEnter/onMouseLeave for inline style
       */}
       <div
-        onClick={onClick}
+        onClick={handleClick}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
           boxShadow,
           transform: `scale(${scale})`,
           transition: "transform 0.3s, box-shadow 0.3s",
+          cursor: onClick || linkUrl ? "pointer" : "default",
         }}
         className="
           relative
@@ -130,7 +145,6 @@ export default function CategoryCard({
           items-center
           justify-center
           text-gray-800
-          cursor-pointer
           p-4
         "
       >
@@ -159,9 +173,16 @@ export default function CategoryCard({
               transition-opacity
               duration-200
               text-center
+              flex
+              items-center
+              justify-center
             `}
           >
-            {title}
+            <span>{title}</span>
+            {/* Optionally show a small icon for external links */}
+            {linkUrl && (
+              <ExternalLink className="ml-1 inline-block" size={12} />
+            )}
           </div>
         )}
       </div>
