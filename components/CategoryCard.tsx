@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion } from "motion/react";
 
 type CategoryCardProps = {
@@ -39,6 +39,20 @@ export default function CategoryCard({
 
   // Track hover state
   const [hover, setHover] = useState(false);
+  // Track if we're on a mobile device
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if we're on a mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Non-hover style
   const nonHoverShadow = `0 0 5px 2px rgba(${primaryColor},0.2), 0 0 10px 5px rgba(${secondaryColor},0.2)`;
@@ -88,6 +102,7 @@ export default function CategoryCard({
         top: `calc(50% + ${y})`,
         left: `calc(50% + ${x})`,
         transform: "translate(-50%, -50%)",
+        zIndex: hover ? 10 : 1, // Ensure hovered cards are on top
       }}
     >
       {/* 
@@ -127,7 +142,7 @@ export default function CategoryCard({
         />
         {title && (
           <div
-            className="
+            className={`
               absolute
               bottom-0 left-1/2
               translate-x-[-50%]
@@ -139,13 +154,12 @@ export default function CategoryCard({
               text-white
               text-xs
               border border-gray-400
-              opacity-0
+              ${isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"}
               pointer-events-none
               transition-opacity
               duration-200
-              group-hover:opacity-100
               text-center
-            "
+            `}
           >
             {title}
           </div>

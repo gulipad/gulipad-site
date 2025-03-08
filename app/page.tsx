@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 
 import MemojiScrubber from "@/components/MemojiScrubber";
@@ -10,6 +10,7 @@ export default function Home() {
   const [memojiLoaded, setMemojiLoaded] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   // Check for mobile screen size on mount and window resize
   useEffect(() => {
@@ -27,6 +28,32 @@ export default function Home() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Fix for mobile viewport issues
+  useEffect(() => {
+    // Function to set the correct viewport height
+    const setViewportHeight = () => {
+      if (mainRef.current) {
+        // Set a custom CSS property based on the actual window inner height
+        document.documentElement.style.setProperty(
+          "--app-height",
+          `${window.innerHeight}px`
+        );
+      }
+    };
+
+    // Initial set
+    setViewportHeight();
+
+    // Update on resize and orientation change
+    window.addEventListener("resize", setViewportHeight);
+    window.addEventListener("orientationchange", setViewportHeight);
+
+    return () => {
+      window.removeEventListener("resize", setViewportHeight);
+      window.removeEventListener("orientationchange", setViewportHeight);
+    };
+  }, []);
+
   const stablePauseAfter = useMemo(() => ({ ",": 500 }), []);
   const handleComplete = useCallback(() => setIntroComplete(true), []);
 
@@ -40,8 +67,8 @@ export default function Home() {
         {
           title: "Github",
           emoji: "github",
-          angle: 250,
-          distance: 40,
+          angle: 245,
+          distance: 42,
           delay: 200,
           primaryColor: "255,99,71",
           secondaryColor: "255,127,80",
@@ -49,7 +76,7 @@ export default function Home() {
         {
           title: "Projects",
           emoji: "hammer-and-wrench",
-          angle: 280,
+          angle: 285,
           distance: 40,
           delay: 600,
           primaryColor: "0,123,255",
@@ -58,8 +85,8 @@ export default function Home() {
         {
           title: "About me",
           emoji: "book",
-          angle: 45,
-          distance: 15,
+          angle: 40,
+          distance: 12,
           delay: 800,
           primaryColor: "34,139,34",
           secondaryColor: "50,205,50",
@@ -67,8 +94,8 @@ export default function Home() {
         {
           title: "X",
           emoji: "x",
-          angle: 100,
-          distance: 20,
+          angle: 110,
+          distance: 15,
           delay: 1000,
           primaryColor: "255,0,150",
           secondaryColor: "0,255,255",
@@ -76,7 +103,7 @@ export default function Home() {
         {
           title: "Interests",
           emoji: "thinking",
-          angle: 155,
+          angle: 170,
           distance: 20,
           delay: 30,
           primaryColor: "138,43,226",
@@ -136,7 +163,11 @@ export default function Home() {
   }, [isMobile]);
 
   return (
-    <main className="relative min-h-screen w-screen bg-black flex flex-col items-center justify-center overflow-hidden">
+    <main
+      ref={mainRef}
+      className="relative w-screen bg-black flex flex-col items-center justify-center overflow-hidden"
+      style={{ height: "var(--app-height, 100vh)" }}
+    >
       {/* Background effect */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
@@ -170,7 +201,7 @@ export default function Home() {
       <div
         className={`
           relative 
-          ${isMobile ? "absolute bottom-16 w-full" : ""}
+          ${isMobile ? "absolute bottom-24 w-full" : ""}
           flex flex-col items-center justify-center
         `}
       >
@@ -192,10 +223,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-12 w-full text-center text-gray-400 text-xs md:hidden">
-        Drag along to make Guli follow you.
-      </div>
-      <footer className="absolute bottom-4 text-white text-s">
+      <footer className="absolute bottom-4 text-white text-sm">
         Made with ❤️ in Madrid by Gulipad
       </footer>
     </main>
