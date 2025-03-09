@@ -162,7 +162,7 @@ export default function Home() {
         {
           title: "X",
           emoji: "x",
-          linkUrl: "https://x.com/gulipad",
+          linkUrl: "https://x.com/GuliMoreno",
           angle: 0,
           distance: 35,
           delay: 1000,
