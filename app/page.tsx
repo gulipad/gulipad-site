@@ -7,6 +7,7 @@ import IntroBox from "@/components/IntroBox";
 import CategoryCard from "@/components/CategoryCard";
 import AboutMePanel from "@/components/panels/AboutMePanel";
 import InterestsPanel from "@/components/panels/InterestsPanel";
+import ProjectsPanel from "@/components/panels/ProjectsPanel";
 
 export default function Home() {
   const [memojiLoaded, setMemojiLoaded] = useState(false);
@@ -247,36 +248,10 @@ export default function Home() {
       </div>
 
       {/* Content panels that appear when cards are clicked */}
-      {/* Projects Panel */}
-      <motion.div
-        className="absolute bg-black bg-opacity-90 text-white p-6 rounded-lg border border-gray-700 z-10"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{
-          opacity: activePanel === "Projects" ? 1 : 0,
-          scale: activePanel === "Projects" ? 1 : 0.8,
-          display: activePanel === "Projects" ? "block" : "none",
-        }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">My Projects</h2>
-          <button
-            onClick={() => setActivePanel(null)}
-            className="text-gray-400 hover:text-white"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="space-y-3">
-          <p>Here are some of my recent projects:</p>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>Personal portfolio website</li>
-            <li>AI-powered content generator</li>
-            <li>React component library</li>
-            <li>Mobile app for tracking habits</li>
-          </ul>
-        </div>
-      </motion.div>
+      <ProjectsPanel
+        isVisible={activePanel === "Projects"}
+        onClose={() => setActivePanel(null)}
+      />
 
       <AboutMePanel
         isVisible={activePanel === "About"}

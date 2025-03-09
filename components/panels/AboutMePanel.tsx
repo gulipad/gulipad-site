@@ -203,6 +203,16 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   .
                 </li>
                 <li>
+                  I am a <strong>Catholic</strong> → I particularly like{" "}
+                  <LinkPreviewBadge
+                    link="https://en.wikipedia.org/wiki/Ignatius_of_Loyola"
+                    display="San Ignacio de Loyola"
+                  />{" "}
+                  , logician, priest, and founder of the Jesuits. He is a strong
+                  proponent of going beyond ones self and the ties of
+                  spirituality and practical service in the world. AMDG.
+                </li>
+                <li>
                   I value <strong>Consistency</strong> as a virtue → I try
                   living through a version of the{" "}
                   <LinkPreviewBadge

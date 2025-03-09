@@ -2,13 +2,6 @@ import { useEffect } from "react";
 import { motion } from "motion/react";
 import LinkPreviewBadge from "@/components/LinkPreviewBadge";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
 interface InterestsPanelProps {
   isVisible: boolean;
   onClose: () => void;
@@ -38,7 +31,7 @@ interface Person {
 // - In the press: Media mentions, interviews, articles
 // - Music and sports: Detailed breakdown of instruments played and sports activities
 // - Favorite youtube channels: Curated list of channels I follow and recommend
-// - Podcasts
+// - Podcasts (I like and I've been on)
 
 const articles: Article[] = [
   {

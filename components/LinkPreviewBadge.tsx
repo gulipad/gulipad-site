@@ -121,6 +121,14 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
     setHoverStart(null);
   }
 
+  function handlePreviewClick() {
+    if (openInNewTab) {
+      window.open(link, "_blank", "noopener,noreferrer");
+    } else {
+      window.location.href = link;
+    }
+  }
+
   // Extract domain from the link
   const getDomain = (url: string) => {
     try {
@@ -162,6 +170,7 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
                   : "auto",
               position: "absolute",
               zIndex: 99999,
+              cursor: "pointer",
             }}
             onMouseEnter={() => {
               // Clear hide timeout when mouse enters the preview
@@ -174,6 +183,7 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
               // Hide immediately when mouse leaves the preview
               hidePreviewImmediately();
             }}
+            onClick={handlePreviewClick}
           >
             {!loadError ? (
               <div className="w-96 h-64 bg-white shadow-lg border border-gray-300 rounded-md overflow-hidden">
@@ -188,7 +198,12 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
                   <iframe
                     src={link}
                     title="Link preview"
-                    style={{ width: "1200px", height: "900px", border: "none" }}
+                    style={{
+                      width: "1200px",
+                      height: "900px",
+                      border: "none",
+                      pointerEvents: "none",
+                    }}
                     onLoad={(e) => {
                       if (hoverStart && Date.now() - hoverStart < 200) {
                         setLoadError(true);
