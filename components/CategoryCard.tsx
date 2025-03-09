@@ -148,11 +148,16 @@ export default function CategoryCard({
           p-4
         "
       >
-        <img
+        <motion.img
           src={`/icons/${emoji}.png`}
           alt={emoji}
           className="text-lg"
-          style={{ transition: "transform 0.3s" }}
+          whileHover={{ scale: 1.2 }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 10,
+          }}
         />
         {title && (
           <div

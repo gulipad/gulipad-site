@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import MemojiScrubber from "@/components/MemojiScrubber";
 import IntroBox from "@/components/IntroBox";
 import CategoryCard from "@/components/CategoryCard";
+import AboutMePanel from "@/components/panels/AboutMePanel";
 
 export default function Home() {
   const [memojiLoaded, setMemojiLoaded] = useState(false);
@@ -247,7 +248,7 @@ export default function Home() {
       {/* Content panels that appear when cards are clicked */}
       {/* Projects Panel */}
       <motion.div
-        className="absolute bg-black bg-opacity-90 text-white p-6 rounded-lg border border-gray-700 max-w-md z-10"
+        className="absolute bg-black bg-opacity-90 text-white p-6 rounded-lg border border-gray-700 z-10"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{
           opacity: activePanel === "Projects" ? 1 : 0,
@@ -276,38 +277,10 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* About Me Panel */}
-      <motion.div
-        className="absolute bg-black bg-opacity-90 text-white p-6 rounded-lg border border-gray-700 max-w-md z-10"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{
-          opacity: activePanel === "About" ? 1 : 0,
-          scale: activePanel === "About" ? 1 : 0.8,
-          display: activePanel === "About" ? "block" : "none",
-        }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">About Me</h2>
-          <button
-            onClick={() => setActivePanel(null)}
-            className="text-gray-400 hover:text-white"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="space-y-3">
-          <p>
-            Hi, I'm Guli! I'm a front-end developer based in Madrid with a
-            passion for creating beautiful, intuitive user interfaces.
-          </p>
-          <p>
-            I specialize in React, TypeScript, and modern web technologies. When
-            I'm not coding, you can find me exploring the city or trying out new
-            recipes.
-          </p>
-        </div>
-      </motion.div>
+      <AboutMePanel
+        isVisible={activePanel === "About"}
+        onClose={() => setActivePanel(null)}
+      />
 
       {/* Interests Panel */}
       <motion.div
