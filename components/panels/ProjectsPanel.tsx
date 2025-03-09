@@ -13,6 +13,7 @@ interface Project {
   image: string;
   tags: string[];
   link: string;
+  isBlocked?: boolean;
 }
 
 interface OtherProject {
@@ -28,6 +29,7 @@ const projects: Project[] = [
     image: "capchase.png",
     tags: ["Startup", "Series B", "Co-founder"],
     link: "https://www.capchase.com/",
+    isBlocked: true,
   },
   {
     title: "Exponential Fellowship",
@@ -40,6 +42,7 @@ const projects: Project[] = [
     image: "carlo.png",
     tags: ["Non-profit", "Creator"],
     link: "https://wa.me/message/USMSLYHXBELEI1",
+    isBlocked: true,
   },
 ];
 
@@ -192,6 +195,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                           <LinkPreviewBadge
                             link={project.link}
                             display="Visit"
+                            isBlocked={project.isBlocked}
                           />
                         </div>
 

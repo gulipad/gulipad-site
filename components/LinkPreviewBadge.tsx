@@ -1,40 +1,39 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ExternalLink } from "lucide-react";
+import Spinner from "@/components/Spinner";
 
 interface LinkPreviewBadgeProps {
   link: string;
   display: string;
   openInNewTab?: boolean;
+  isBlocked?: boolean;
 }
 
 /**
  * A simplified link badge with preview that balances responsiveness with usability.
- * Uses a combined hover approach with a small delay for better user experience.
+ * Shows preview on hover and immediately hides it when mouse leaves the badge.
  * Positions the preview intelligently based on screen position to avoid clipping.
  */
 const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   link,
   display,
   openInNewTab = true,
+  isBlocked = false,
 }) => {
   const [showPreview, setShowPreview] = useState(false);
   const [coords, setCoords] = useState({ x: 0, y: 0, width: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
-  const [loadError, setLoadError] = useState(false);
+  const [loadError, setLoadError] = useState(isBlocked);
   const [hoverStart, setHoverStart] = useState<number | null>(null);
   const [previewPosition, setPreviewPosition] = useState<"left" | "right">(
     "right"
   );
 
-  // Refs for elements and timeouts
-  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const previewContainerRef = useRef<HTMLDivElement>(null);
-
   // Set up load error detection
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null;
-    if (showPreview && !isLoaded && !loadError) {
+    if (showPreview && !isLoaded && !loadError && !isBlocked) {
       timer = setTimeout(() => {
         if (!isLoaded) {
           setLoadError(true);
@@ -44,7 +43,7 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [showPreview, isLoaded, loadError]);
+  }, [showPreview, isLoaded, loadError, isBlocked]);
 
   // Handle scroll/gesture events
   useEffect(() => {
@@ -72,12 +71,6 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   }, [showPreview]);
 
   function handleMouseEnter(e: React.MouseEvent<HTMLSpanElement>) {
-    // Clear any existing hide timeout
-    if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current);
-      hideTimeoutRef.current = null;
-    }
-
     setHoverStart(Date.now());
     setShowPreview(true);
 
@@ -98,26 +91,18 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   }
 
   function handleMouseLeave() {
-    // Short delay to allow moving to the preview
-    hideTimeoutRef.current = setTimeout(() => {
-      setShowPreview(false);
-      resetPreviewState();
-    }, 50); // Very short delay - just enough to allow direct movement
+    // Hide preview immediately when mouse leaves the badge
+    hidePreviewImmediately();
   }
 
   function hidePreviewImmediately() {
     setShowPreview(false);
     resetPreviewState();
-
-    if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current);
-      hideTimeoutRef.current = null;
-    }
   }
 
   function resetPreviewState() {
     setIsLoaded(false);
-    setLoadError(false);
+    setLoadError(isBlocked);
     setHoverStart(null);
   }
 
@@ -159,7 +144,6 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
       {showPreview &&
         createPortal(
           <div
-            ref={previewContainerRef}
             className="absolute"
             style={{
               top: coords.y + 5,
@@ -172,27 +156,22 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
               zIndex: 99999,
               cursor: "pointer",
             }}
-            onMouseEnter={() => {
-              // Clear hide timeout when mouse enters the preview
-              if (hideTimeoutRef.current) {
-                clearTimeout(hideTimeoutRef.current);
-                hideTimeoutRef.current = null;
-              }
-            }}
-            onMouseLeave={() => {
-              // Hide immediately when mouse leaves the preview
-              hidePreviewImmediately();
-            }}
             onClick={handlePreviewClick}
           >
             {!loadError ? (
               <div className="w-96 h-64 bg-white shadow-lg border border-gray-300 rounded-md overflow-hidden">
+                {!isLoaded && (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Spinner variant="dark" />
+                  </div>
+                )}
                 <div
                   style={{
                     width: "1200px",
                     height: "900px",
                     transform: "scale(0.4)",
                     transformOrigin: "top left",
+                    display: isLoaded ? "block" : "none",
                   }}
                 >
                   <iframe

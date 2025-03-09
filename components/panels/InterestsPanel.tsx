@@ -12,18 +12,21 @@ interface Investment {
   subtitle: string;
   link: string;
   tags: string[];
+  isBlocked?: boolean;
 }
 
 interface Article {
   title: string;
   link: string;
   description: string;
+  isBlocked?: boolean;
 }
 
 interface Person {
   name: string;
   link: string;
   description: string;
+  isBlocked?: boolean;
 }
 
 // Other potential sections to add:
@@ -35,22 +38,18 @@ interface Person {
 
 const articles: Article[] = [
   {
-    title: "Speed Wins",
-    link: "https://patrickcollison.com/fast",
-    description:
-      "A collection of examples of ambitious projects accomplished quickly",
-  },
-  {
     title: "Coda's Two-Way Writeups",
     link: "https://coda.io/@lshackleton/two-way-writeups-coda-s-secret-to-shipping-fast",
     description:
       "How Coda uses two-way writeups to accelerate product development",
+    isBlocked: true,
   },
   {
     title: "YouTube's Growth Rituals",
     link: "https://coda.io/d/Rituals-for-hypergrowth-An-inside-look-at-how-YouTube-scaled_dtrl4NzUguc/Rituals-for-hypergrowth-An-inside-look-at-how-YouTube-scaled_su_30",
     description:
       "YouTube's internal practices and rituals that enabled massive scale",
+    isBlocked: true,
   },
   {
     title: "Measuring Product Fit",
@@ -63,24 +62,34 @@ const articles: Article[] = [
     description: "Critical analysis of AI capabilities and limitations",
   },
   {
+    title: "Speed Wins",
+    link: "https://patrickcollison.com/fast",
+    description:
+      "A collection of examples of ambitious projects accomplished quickly",
+  },
+  {
     title: "Data-Informed Building",
     link: "https://medium.com/sequoia-capital/data-informed-product-building-1e509a5c4112",
     description: "Using data to shape product decisions.",
+    isBlocked: true,
   },
   {
     title: "The Business of AI",
     link: "https://a16z.com/2020/02/16/the-new-business-of-ai-and-how-its-different-from-traditional-software/",
     description: "Why AI ventures differ from classic software.",
+    isBlocked: true,
   },
   {
     title: "Do Things That Don't Scale",
     link: "https://www.ycombinator.com/library/96-do-things-that-don-t-scale",
     description: "YC's early-stage growth philosophy.",
+    isBlocked: true,
   },
   {
     title: "Advantage Flywheels",
     link: "https://futureblind.com/2019/08/03/advantage-flywheels/",
     description: "Compounding benefits through flywheel effects.",
+    isBlocked: true,
   },
   {
     title: "Founder Mode",
@@ -91,21 +100,25 @@ const articles: Article[] = [
     title: "De-risking Startups",
     link: "https://www.codingvc.com/how-to-de-risk-a-startup",
     description: "Tactics to reduce risk and validate startup ideas.",
+    isBlocked: true,
   },
   {
     title: "Productized Notes",
     link: "https://productized.medium.com/productized-notes-using-data-to-set-product-strategy-by-justin-bauer-b0f08ffde9a1",
     description: "Using data to shape effective product strategy.",
+    isBlocked: true,
   },
   {
     title: "Laws of UX",
     link: "https://lawsofux.com/",
     description: "A brief guide to essential UX principles.",
+    isBlocked: true,
   },
   {
     title: "Successful B2B Startups",
     link: "https://www.lennysnewsletter.com/p/how-the-most-successful-b2b-startups",
     description: "Key insights into what drives B2B startup success.",
+    isBlocked: true,
   },
 ];
 
@@ -116,6 +129,7 @@ const investments: Investment[] = [
       "Reveni is Spain's leading soltion for instant refunds for ecommerce.",
     link: "https://www.reveni.com/",
     tags: ["Pre-seed Investment", "2021", "Currently Seed"],
+    isBlocked: true,
   },
   {
     title: "Capably",
@@ -123,6 +137,7 @@ const investments: Investment[] = [
       "Capably is building state of the art agentic systems for enterprise process automation.",
     link: "https://www.capably.ai/",
     tags: ["Pre-seed Investment", "2022", "Currently Seed"],
+    isBlocked: true,
   },
   {
     title: "Broader Portfolio",
@@ -134,12 +149,6 @@ const investments: Investment[] = [
 ];
 
 const people: Person[] = [
-  {
-    name: "Patrick Collison",
-    link: "https://patrickcollison.com/",
-    description:
-      "Co-founder and CEO of Stripe, with insightful essays on technology and progress",
-  },
   {
     name: "Paul Graham",
     link: "http://www.paulgraham.com/",
@@ -156,6 +165,12 @@ const people: Person[] = [
     name: "Ben Thompson",
     link: "https://stratechery.com/",
     description: "Tech strategist & writer, founder of Stratechery.",
+  },
+  {
+    name: "Patrick Collison",
+    link: "https://patrickcollison.com/",
+    description:
+      "Co-founder and CEO of Stripe, with insightful essays on technology and progress",
   },
   {
     name: "Andrew Chen",
@@ -264,6 +279,7 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
                         <LinkPreviewBadge
                           link={person.link}
                           display={person.name}
+                          isBlocked={person.isBlocked}
                         />
                         <span className="text-gray-400">→</span>
                         <span className="text-sm text-gray-300">
@@ -300,6 +316,7 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
                       <LinkPreviewBadge
                         link={investment.link}
                         display="Visit"
+                        isBlocked={investment.isBlocked}
                       />
                     </div>
                     <div className="flex gap-2 mt-3">
@@ -331,6 +348,7 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
                       <LinkPreviewBadge
                         link={article.link}
                         display={article.title}
+                        isBlocked={article.isBlocked}
                       />
                       <span className="text-gray-400">→</span>
                       <span className="text-sm text-gray-300">

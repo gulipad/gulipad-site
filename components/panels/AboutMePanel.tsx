@@ -118,6 +118,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   <LinkPreviewBadge
                     link="https://www.producthunt.com/@gulipad"
                     display="building Products"
+                    isBlocked={true}
                   />
                   , and software lets you do that at an exciting pace.
                 </li>
@@ -126,6 +127,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   <LinkPreviewBadge
                     link="https://www.capchase.com/"
                     display="Capchase"
+                    isBlocked={true}
                   />
                   , where I also build stuff on the Product team. We've deployed
                   over $1.2B of capital to thousands of companies to extend
@@ -159,6 +161,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   <LinkPreviewBadge
                     link="https://www.16personalities.com/intj-personality"
                     display="INTJ"
+                    isBlocked={true}
                   />{" "}
                   – and to some extent I would agree.
                 </p>
@@ -183,6 +186,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   <LinkPreviewBadge
                     link="https://www.youtube.com/watch?v=-YJSDJGyIaU"
                     display="think deeply about simple things"
+                    isBlocked={true}
                   />{" "}
                   → Thinking about{" "}
                   <LinkPreviewBadge
@@ -199,6 +203,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   <LinkPreviewBadge
                     link="https://fs.blog/first-principles/"
                     display="first principles"
+                    isBlocked={true}
                   />
                   .
                 </li>
@@ -275,11 +280,13 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                       <LinkPreviewBadge
                         link="https://www.producthunt.com/posts/flatten-the-curve"
                         display="ProductHunt"
+                        isBlocked={true}
                       />
                       ! Other projects are{" "}
                       <LinkPreviewBadge
                         link="https://www.producthunt.com/products/pause-hbo"
                         display="just for fun"
+                        isBlocked={true}
                       />{" "}
                       (or to fix things that bug me).
                     </li>
@@ -360,6 +367,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   <LinkPreviewBadge
                     link="https://www.youtube.com/watch?v=bD-PuVscYCg"
                     display="cajón flamenco"
+                    isBlocked={true}
                   />{" "}
                   and a few other instruments. I sometimes play at weddings.
                 </li>
@@ -406,6 +414,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                     <LinkPreviewBadge
                       link="https://gulipad.notion.site/A-Story-on-Culture-09a27f6fb132481684cd69d8596cd56f"
                       display="A Story on Culture"
+                      isBlocked={true}
                     />{" "}
                     is a nice primer on my take. Many points here relate to this
                     section.
