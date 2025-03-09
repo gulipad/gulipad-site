@@ -1,5 +1,13 @@
 import { useEffect } from "react";
 import { motion } from "motion/react";
+import LinkPreviewBadge from "@/components/LinkPreviewBadge";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface AboutMePanelProps {
   isVisible: boolean;
@@ -93,14 +101,10 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                 </li>
                 <li>
                   Born in the northwest of Spain in a small city called{" "}
-                  <a
-                    href="https://en.wikipedia.org/wiki/Ferrol,_Spain"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    Ferrol
-                  </a>
+                  <LinkPreviewBadge
+                    link="https://en.wikipedia.org/wiki/Ferrol,_Spain"
+                    display="Ferrol"
+                  />
                   . Being a Navy child, I got to move around a lot. As a kid I
                   lived in Ferrol, San Fernando, Madrid, New Jersey and attended
                   about 5–6 schools before I was 16.
@@ -110,50 +114,34 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   technically an Aerospace Engineer by academics, I got into
                   Software Engineering because it was the easiest way to invent
                   in the age of Information. I <em>really</em> love{" "}
-                  <a
-                    href="https://www.producthunt.com/@ignacio_guli_moreno"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    building Products
-                  </a>
+                  <LinkPreviewBadge
+                    link="https://www.producthunt.com/@gulipad"
+                    display="building Products"
+                  />
                   , and software lets you do that at an exciting pace.
                 </li>
                 <li>
                   I'm currently co-founder at{" "}
-                  <a
-                    href="http://capchase.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    Capchase
-                  </a>
+                  <LinkPreviewBadge
+                    link="https://www.capchase.com/"
+                    display="Capchase"
+                  />
                   , where I also build stuff on the Product team. We've deployed
                   over $1.2B of capital to thousands of companies to extend
                   thousands of years of runway. We are ~100 on the team.
                 </li>
                 <li>
                   I help young Spaniards land in US startups through the{" "}
-                  <a
-                    href="https://www.goexponential.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    Exponential Fellowship
-                  </a>
+                  <LinkPreviewBadge
+                    link="https://www.goexponential.org/"
+                    display="Exponential Fellowship"
+                  />
                   . This is my personal passion project to secure the future of
                   Spanish software.{" "}
-                  <a
-                    href="https://www.goexponential.org/manifesto"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    This
-                  </a>{" "}
+                  <LinkPreviewBadge
+                    link="https://www.goexponential.org/manifesto"
+                    display="This"
+                  />{" "}
                   is the Manifesto. We've sent 7 bright young engineers to top
                   companies in Silicon Valley and New York City.
                 </li>
@@ -167,14 +155,10 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
               <div className="bg-gray-800 rounded-lg p-6 my-4">
                 <p className="text-lg">
                   Myers-Briggs says I'm an{" "}
-                  <a
-                    href="https://www.16personalities.com/intj-personality"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    INTJ
-                  </a>{" "}
+                  <LinkPreviewBadge
+                    link="https://www.16personalities.com/intj-personality"
+                    display="INTJ"
+                  />{" "}
                   – and to some extent I would agree.
                 </p>
                 <blockquote className="border-l-4 border-gray-600 pl-4 italic text-gray-400 my-4">
@@ -195,55 +179,35 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
               <ul className="list-disc pl-5 text-lg">
                 <li>
                   I like to{" "}
-                  <a
-                    href="https://www.youtube.com/watch?v=-YJSDJGyIaU"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    think deeply about simple things
-                  </a>{" "}
+                  <LinkPreviewBadge
+                    link="https://www.youtube.com/watch?v=-YJSDJGyIaU"
+                    display="think deeply about simple things"
+                  />{" "}
                   → Thinking about{" "}
-                  <a
-                    href="https://untools.co/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    thinking
-                  </a>{" "}
+                  <LinkPreviewBadge
+                    link="https://untools.co/"
+                    display="thinking"
+                  />{" "}
                   helps me understand the world better, and be more cognizant of{" "}
-                  <a
-                    href="https://thedecisionlab.com/biases"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    biases
-                  </a>
+                  <LinkPreviewBadge
+                    link="https://thedecisionlab.com/biases"
+                    display="biases"
+                  />
                   . It helps connect ideas in seemingly unrelated topics,
                   because you can always count on{" "}
-                  <a
-                    href="https://fs.blog/first-principles/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    first principles
-                  </a>
+                  <LinkPreviewBadge
+                    link="https://fs.blog/first-principles/"
+                    display="first principles"
+                  />
                   .
                 </li>
                 <li>
                   I value <strong>Consistency</strong> as a virtue → I try
                   living through a version of the{" "}
-                  <a
-                    href="https://en.wikipedia.org/wiki/Categorical_imperative"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    categorical imperative
-                  </a>{" "}
+                  <LinkPreviewBadge
+                    link="https://en.wikipedia.org/wiki/Categorical_imperative"
+                    display="categorical imperative"
+                  />{" "}
                   in Kantian ethics. I have a deep sense of justice, discipline,
                   and respect. Because of this, I will hardly ever punish
                   incompetency, but have zero tolerance for bad faith or
@@ -270,12 +234,12 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   explore all the time.
                 </li>
                 <li>
-                  How you do anything is how you do everything → Pride (not in
-                  the egotistical sense) is one of my predominant traits. I care
-                  deeply about always doing my best. Not to be confused with
-                  perfectionism. I don't seek absolute perfection, but I would
-                  be violating my principle of consistency if I didn't put my
-                  best forth.
+                  <strong>How you do anything is how you do everything</strong>{" "}
+                  → Pride (not in the egotistical sense) is one of my
+                  predominant traits. I care deeply about always doing my best.
+                  Not to be confused with perfectionism. I don't seek absolute
+                  perfection, but I would be violating my principle of
+                  consistency if I didn't put my best forth.
                 </li>
               </ul>
             </div>
@@ -292,32 +256,20 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   <ul className="list-disc pl-5">
                     <li>
                       I like to explore{" "}
-                      <a
-                        href="https://master--vigorous-carson-ad6acc.netlify.app/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600"
-                      >
-                        technology tied to social good
-                      </a>
+                      <LinkPreviewBadge
+                        link="https://master--vigorous-carson-ad6acc.netlify.app/"
+                        display="technology tied to social good"
+                      />
                       . I once reached the podium in{" "}
-                      <a
-                        href="https://www.producthunt.com/posts/flatten-the-curve"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600"
-                      >
-                        ProductHunt
-                      </a>
+                      <LinkPreviewBadge
+                        link="https://www.producthunt.com/posts/flatten-the-curve"
+                        display="ProductHunt"
+                      />
                       ! Other projects are{" "}
-                      <a
-                        href="https://chrome.google.com/webstore/detail/pause-hbo/obkkopdjeglmehankcafionjnhdffjgd"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600"
-                      >
-                        just for fun
-                      </a>{" "}
+                      <LinkPreviewBadge
+                        link="https://www.producthunt.com/products/pause-hbo"
+                        display="just for fun"
+                      />{" "}
                       (or to fix things that bug me).
                     </li>
                   </ul>
@@ -327,51 +279,63 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                   you can get there for free is mind-boggling. This didn't exist
                   15 years ago. Here are some of my favorite videos from a few
                   channels:
-                  <ul className="list-disc pl-5">
-                    <li>
-                      <em>Expand for more</em>
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.youtube.com/watch?v=sMb00lz-IfE"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600"
-                      >
-                        Veritasium on randomness
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.youtube.com/watch?v=fCn8zs912OE"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600"
-                      >
-                        Vsauce on the Zipf mystery
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.youtube.com/watch?v=brU5yLm9DZM"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600"
-                      >
-                        3Blue1Brown on Pi
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.youtube.com/watch?v=qKf2EwInKbA"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600"
-                      >
-                        [Spanish] Lemniscata on logarithms
-                      </a>
-                    </li>
-                  </ul>
+                  <Accordion type="single" collapsible>
+                    <AccordionItem
+                      value="youtube-favorites"
+                      className="border-none"
+                    >
+                      <AccordionTrigger className="py-2 text-blue-400 hover:text-blue-300">
+                        <span className="text-sm italic">
+                          Click to see some of my favorite videos from a few
+                          channels.
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <ul className="list-disc pl-5">
+                          <li>
+                            <a
+                              href="https://www.youtube.com/watch?v=sMb00lz-IfE"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600"
+                            >
+                              Veritasium on randomness
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="https://www.youtube.com/watch?v=fCn8zs912OE"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600"
+                            >
+                              Vsauce on the Zipf mystery
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="https://www.youtube.com/watch?v=brU5yLm9DZM"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600"
+                            >
+                              3Blue1Brown on Pi
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="https://www.youtube.com/watch?v=qKf2EwInKbA"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600"
+                            >
+                              [Spanish] Lemniscata on logarithms
+                            </a>
+                          </li>
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </li>
                 <li>
                   I enjoy well-told stories. I'm a big film nerd, though it's
@@ -382,14 +346,10 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                 <li>
                   In my love for creating stuff, music is a great outlet. I like
                   to play the drums, guitar,{" "}
-                  <a
-                    href="https://www.youtube.com/watch?v=bD-PuVscYCg"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    cajón flamenco
-                  </a>{" "}
+                  <LinkPreviewBadge
+                    link="https://www.youtube.com/watch?v=bD-PuVscYCg"
+                    display="cajón flamenco"
+                  />{" "}
                   and a few other instruments. I sometimes play at weddings.
                 </li>
                 <li>
@@ -398,14 +358,10 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                 </li>
                 <li>
                   I enjoy other sports as well. Like most Spaniards, I play{" "}
-                  <a
-                    href="https://en.wikipedia.org/wiki/Padel_(sport)"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600"
-                  >
-                    padel
-                  </a>{" "}
+                  <LinkPreviewBadge
+                    link="https://en.wikipedia.org/wiki/Padel_(sport)"
+                    display="padel"
+                  />{" "}
                   frequently 🎾. I also surf, kitesurf, ski, and scuba dive (is
                   that even a sport?).
                 </li>
@@ -436,14 +392,10 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                 <ul className="list-disc pl-5 text-lg">
                   <li>
                     I <em>really</em> care about culture.{" "}
-                    <a
-                      href="https://www.notion.so/A-Story-on-Culture-9f798084322a4a719654b38ac108645a?pvs=21"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600"
-                    >
-                      A Story on Culture
-                    </a>{" "}
+                    <LinkPreviewBadge
+                      link="https://gulipad.notion.site/A-Story-on-Culture-09a27f6fb132481684cd69d8596cd56f"
+                      display="A Story on Culture"
+                    />{" "}
                     is a nice primer on my take. Many points here relate to this
                     section.
                   </li>
@@ -509,14 +461,10 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                 <ul className="list-disc pl-5 text-lg">
                   <li>
                     I tend to be quite{" "}
-                    <a
-                      href="https://xkcd.com/1205/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600"
-                    >
-                      pragmatic
-                    </a>{" "}
+                    <LinkPreviewBadge
+                      link="https://xkcd.com/1205/"
+                      display="pragmatic"
+                    />{" "}
                     and work smart, focusing on the fundamentals.
                   </li>
                   <li>
@@ -613,28 +561,18 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                 I put a lot of thought into how I communicate within an
                 organization. In an async world and high-growth environments,
                 comms can become a massive bottleneck if not carefully
-                considered. I’ve created many documents around this.
+                considered. I've created{" "}
+                <LinkPreviewBadge
+                  link="https://file.notion.so/f/f/c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82/bac5c8c6-b946-49e3-b3e2-a2aec358785a/On_Write-Ups_(2).pdf?table=block&id=3752d168-1c69-4ea4-aeb3-1a0da57263c0&spaceId=c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82&expirationTimestamp=1741564800000&signature=nEa5j0U2s7mnik3CJu8Ok4J_hbdXLh8dC-nV3hY_rdQ&downloadName=On_Write-Ups.pdf"
+                  display="many"
+                />{" "}
+                documents around{" "}
+                <LinkPreviewBadge
+                  link="https://file.notion.so/f/f/c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82/d5aefa48-9606-47a9-8dbf-efba8e80d01a/Base_Rules_for_Using_Notion.pdf?table=block&id=7063b185-efa0-4e32-9517-f9ce69e249b3&spaceId=c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82&expirationTimestamp=1741564800000&signature=xDfjKbNj7B_EvMdDdhOgD1HQoQWNUwAOxXiphw6GNkw&downloadName=Base+Rules+for+Using+Notion.pdf"
+                  display="this"
+                />
+                .
               </div>{" "}
-              <p className="text-lg">
-                <a
-                  href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bac5c8c6-b946-49e3-b3e2-a2aec358785a/On_Write-Ups_(2).pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600"
-                >
-                  On_Write-Ups.pdf
-                </a>
-              </p>
-              <p className="text-lg">
-                <a
-                  href="https://prod-files-secure.s3.us-west-2.amazonaws.com/c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82/d5aefa48-9606-47a9-8dbf-efba8e80d01a/Base_Rules_for_Using_Notion.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600"
-                >
-                  Base Rules for Using Notion.pdf
-                </a>
-              </p>
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
                 <h3 className="text-2xl font-semibold mb-4">
                   Style and Frequency
@@ -661,14 +599,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
                     <strong>Making the most of async tools →</strong> If we can
                     avoid meetings (and make them shorter when necessary),
                     that's best. I rely on{" "}
-                    <a
-                      href="http://loom.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600"
-                    >
-                      Loom
-                    </a>{" "}
+                    <LinkPreviewBadge link="http://loom.com" display="Loom" />{" "}
                     and written documentation for proposing ideas. Meetings are
                     then reserved for alignment and discussion.
                   </li>
