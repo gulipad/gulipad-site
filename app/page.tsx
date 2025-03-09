@@ -6,6 +6,7 @@ import MemojiScrubber from "@/components/MemojiScrubber";
 import IntroBox from "@/components/IntroBox";
 import CategoryCard from "@/components/CategoryCard";
 import AboutMePanel from "@/components/panels/AboutMePanel";
+import InterestsPanel from "@/components/panels/InterestsPanel";
 
 export default function Home() {
   const [memojiLoaded, setMemojiLoaded] = useState(false);
@@ -70,8 +71,8 @@ export default function Home() {
           title: "Github",
           emoji: "github",
           linkUrl: "https://github.com/gulipad",
-          angle: 245,
-          distance: 45,
+          angle: 250,
+          distance: 47,
           delay: 200,
           primaryColor: "255,99,71",
           secondaryColor: "255,127,80",
@@ -82,7 +83,7 @@ export default function Home() {
           onClick: () =>
             setActivePanel((prev) => (prev === "Projects" ? null : "Projects")),
           angle: 280,
-          distance: 42,
+          distance: 45,
           delay: 600,
           primaryColor: "0,123,255",
           secondaryColor: "0,200,255",
@@ -283,36 +284,10 @@ export default function Home() {
       />
 
       {/* Interests Panel */}
-      <motion.div
-        className="absolute bg-black bg-opacity-90 text-white p-6 rounded-lg border border-gray-700 max-w-md z-10"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{
-          opacity: activePanel === "Interests" ? 1 : 0,
-          scale: activePanel === "Interests" ? 1 : 0.8,
-          display: activePanel === "Interests" ? "block" : "none",
-        }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">My Interests</h2>
-          <button
-            onClick={() => setActivePanel(null)}
-            className="text-gray-400 hover:text-white"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="space-y-3">
-          <p>Some things that fascinate me:</p>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>Web3 and blockchain technology</li>
-            <li>UI/UX design principles</li>
-            <li>Machine learning and AI</li>
-            <li>Photography and visual arts</li>
-            <li>Electronic music production</li>
-          </ul>
-        </div>
-      </motion.div>
+      <InterestsPanel
+        isVisible={activePanel === "Interests"}
+        onClose={() => setActivePanel(null)}
+      />
 
       {isMobile && (
         <div className="absolute bottom-12 w-full text-center text-gray-500 text-xs">

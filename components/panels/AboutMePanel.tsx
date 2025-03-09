@@ -72,6 +72,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({ isVisible, onClose }) => {
         </div>
 
         {/* Content */}
+        <h1 className="text-6xl font-bold text-center py-8">Guli's Handbook</h1>
         <div className="px-6 py-8 sm:px-8">
           <div className="max-w-4xl mx-auto space-y-8">
             {/* Introduction Section */}

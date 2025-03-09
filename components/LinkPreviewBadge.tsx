@@ -11,6 +11,7 @@ interface LinkPreviewBadgeProps {
 /**
  * A simplified link badge with preview that balances responsiveness with usability.
  * Uses a combined hover approach with a small delay for better user experience.
+ * Positions the preview intelligently based on screen position to avoid clipping.
  */
 const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   link,
@@ -18,10 +19,13 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   openInNewTab = true,
 }) => {
   const [showPreview, setShowPreview] = useState(false);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [coords, setCoords] = useState({ x: 0, y: 0, width: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [hoverStart, setHoverStart] = useState<number | null>(null);
+  const [previewPosition, setPreviewPosition] = useState<"left" | "right">(
+    "right"
+  );
 
   // Refs for elements and timeouts
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -78,9 +82,18 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
     setShowPreview(true);
 
     const rect = e.currentTarget.getBoundingClientRect();
+
+    // Determine if we're on the right side of the screen
+    // Use window.innerWidth to get the viewport width
+    const isRightSide = rect.left > window.innerWidth / 2;
+
+    // Set the position based on where we are on the screen
+    setPreviewPosition(isRightSide ? "left" : "right");
+
     setCoords({
       x: rect.left,
       y: rect.bottom + window.scrollY,
+      width: rect.width,
     });
   }
 
@@ -142,7 +155,11 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
             className="absolute"
             style={{
               top: coords.y + 5,
-              left: coords.x,
+              left: previewPosition === "right" ? coords.x : "auto",
+              right:
+                previewPosition === "left"
+                  ? `calc(100vw - ${coords.x + coords.width}px)`
+                  : "auto",
               position: "absolute",
               zIndex: 99999,
             }}
