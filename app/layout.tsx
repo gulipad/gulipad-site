@@ -13,8 +13,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://gulipad.vercel.app/"),
   title: "Hi, this is Guli",
   description: "Gulipad's home page for you to explore.",
+  // Add OpenGraph metadata
+  openGraph: {
+    title: "Hi, this is Guli",
+    description: "Gulipad's home page for you to explore.",
+    url: "/",
+    siteName: "Gulipad's Home",
+    images: [
+      {
+        url: "/og-image.png", // Path relative to the /public directory
+        width: 1200,
+        height: 630,
+        alt: "Guli's Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  // Add Twitter-specific card metadata
+  twitter: {
+    card: "summary_large_image",
+    title: "Hi, this is Guli",
+    description: "Gulipad's home page for you to explore.",
+    images: ["/og-image.png"], // Path relative to the /public directory
+    creator: "@gulipad", // Your Twitter handle
+  },
 };
 
 export default function RootLayout({
