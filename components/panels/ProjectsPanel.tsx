@@ -21,6 +21,7 @@ interface OtherProject {
   description: string;
   tags: string[];
   link?: string;
+  isBlocked?: boolean;
 }
 
 const projects: Project[] = [
@@ -67,6 +68,7 @@ const otherProjects: OtherProject[] = [
       "A streamlit notebook to explore virus spread. 🥉 3rd place in Producthunt's Product of the Day. Now inactive (link is to Producthunt).",
     tags: ["Streamlit", "Inactive"],
     link: "https://www.producthunt.com/products/flatten-the-curve-2#flatten-the-curve",
+    isBlocked: true,
   },
   {
     title: "Blocks for Change",
@@ -309,6 +311,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                           <LinkPreviewBadge
                             link={project.link}
                             display="Visit"
+                            isBlocked={project.isBlocked}
                           />
                         ) : (
                           <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300">
