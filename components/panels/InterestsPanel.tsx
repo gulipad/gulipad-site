@@ -132,6 +132,22 @@ const investments: Investment[] = [
     isBlocked: true,
   },
   {
+    title: "Rebolt",
+    subtitle:
+      "Rebolt (YC W25) is buliding AI agents to supercharge restaurant operations.",
+    link: "https://www.rebolt.ai/",
+    tags: ["Pre-seed Investment", "2025"],
+    isBlocked: true,
+  },
+  {
+    title: "Project Europe",
+    subtitle:
+      "Project Europe is fund by 20VC to support next-gen technical builders.",
+    link: "https://www.projecteurope.co/",
+    tags: ["LP", "2025"],
+    isBlocked: true,
+  },
+  {
     title: "Capably",
     subtitle:
       "Capably is building state of the art agentic systems for enterprise process automation.",
