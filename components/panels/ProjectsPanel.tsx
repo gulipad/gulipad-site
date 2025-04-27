@@ -55,13 +55,6 @@ const projects: Project[] = [
 
 const otherProjects: OtherProject[] = [
   {
-    title: "A Good Date Picker",
-    description:
-      "A natural language date picker that lets users type dates in plain English (like 'next Friday' or '+3 months') instead of clicking through calendars. Built with shadcn/ui and chrono-node.",
-    tags: ["Open Source", "TypeScript", "React", "shadcn/ui"],
-    link: "https://github.com/gulipad/a-good-date-picker",
-  },
-  {
     title: "Comgo",
     description:
       "Blockchain traceability for social impact management. I helped code their firsts websites and went to Brussels in 2019 to present to the European Commission.",
@@ -250,19 +243,30 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                         {index === 1 && (
                           <div className="text-gray-300 text-sm">
                             <p className="mb-2">
-                              Carlo is a Whatsapp bot that sends the daily
-                              Gospel and Saints to its users. It was born as a
-                              personal exploration of building with AI, and the
-                              concept of Faith.
+                              The Exponential Fellowship is a passion project
+                              launched in 2024 to help bright young spaniards
+                              work in excellent teams in the US:
                             </p>
                             <ul className="list-disc list-inside space-y-1">
-                              <li>It's built on Supabase Edge Functions.</li>
-                              <li>Its brain is powered by Google Gemini.</li>
+                              <li>
+                                It's based on the{" "}
+                                <LinkPreviewBadge
+                                  link="https://www.goexponential.org/manifesto"
+                                  display="thesis"
+                                />{" "}
+                                that a few excellent people can change the
+                                trajectory of a country.
+                              </li>
+                              <li>
+                                We have{" "}
+                                <LinkPreviewBadge
+                                  link="https://www.goexponential.org/directory/fellows"
+                                  display="8 Fellows"
+                                />{" "}
+                                in NY and SF, working for some of the most
+                                exciting YC and a16z companies out there.
+                              </li>
                             </ul>
-                            <p className="mb-2">
-                              Inspired by Saint Carlo Acutis, patron Saint of
-                              the internet.
-                            </p>
                           </div>
                         )}
 
