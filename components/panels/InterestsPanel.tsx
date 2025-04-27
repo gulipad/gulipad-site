@@ -277,48 +277,20 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
                 writings, and my investments. And who knows what else.
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* People Section */}
-              <div>
-                <h2 className="text-3xl font-bold mb-4">
-                  Interesting People 🧠
-                </h2>
-                <hr className="border-gray-700 my-4" />
-                <p className="mb-4">
-                  Thinkers, founders, and innovators whose writings I follow and
-                  admire.
-                </p>
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
-                  <ul className="space-y-4">
-                    {people.map((person, index) => (
-                      <li key={index} className="flex items-center gap-2">
-                        <LinkPreviewBadge
-                          link={person.link}
-                          display={person.name}
-                          isBlocked={person.isBlocked}
-                        />
-                        <span className="text-gray-400">→</span>
-                        <span className="text-sm text-gray-300">
-                          {person.description}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
 
-              {/* Investments Section */}
-              <div>
-                <h2 className="text-3xl font-bold mb-4">Investments 💰</h2>
-                <hr className="border-gray-700 my-4" />
-                <p className="mb-4">
-                  I don't hold a lot of cash. I angel invest in some startups,
-                  and keep a diversified portfolio.
-                </p>
+            {/* Investments Section */}
+            <div>
+              <h2 className="text-3xl font-bold mb-4">Investments 💰</h2>
+              <hr className="border-gray-700 my-4" />
+              <p className="mb-4">
+                I don't hold a lot of cash. I angel invest in some startups, and
+                keep a diversified portfolio.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {investments.map((investment, index) => (
                   <div
                     key={index}
-                    className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 mb-4 p-6"
+                    className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6"
                   >
                     <div className="flex justify-between items-start">
                       <div>
@@ -347,6 +319,33 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* People Section */}
+            <div>
+              <h2 className="text-3xl font-bold mb-4">Interesting People 🧠</h2>
+              <hr className="border-gray-700 my-4" />
+              <p className="mb-4">
+                Thinkers, founders, and innovators whose writings I follow and
+                admire.
+              </p>
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
+                <div className="space-y-4">
+                  {people.map((person, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <LinkPreviewBadge
+                        link={person.link}
+                        display={person.name}
+                        isBlocked={person.isBlocked}
+                      />
+                      <span className="text-gray-400">→</span>
+                      <span className="text-sm text-gray-300">
+                        {person.description}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
