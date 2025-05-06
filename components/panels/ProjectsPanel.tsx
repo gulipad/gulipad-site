@@ -49,7 +49,7 @@ const projects: Project[] = [
     title: "A Good Date Picker",
     image: "date-picker.png",
     tags: ["Open Source", "TypeScript", "React"],
-    link: "https://github.com/gulipad/a-good-date-picker",
+    link: "https://gulipad.github.io/a-good-date-picker/",
   },
 ];
 
