@@ -14,7 +14,66 @@ export default function Home() {
   const [introComplete, setIntroComplete] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [activePanel, setActivePanel] = useState<string | null>(null);
+  const [previousPanel, setPreviousPanel] = useState<string | null>(null);
+  const [isNavigating, setIsNavigating] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
+
+  // Define the navigation sections
+  const sections = useMemo(() => ["Projects", "About", "Interests"], []);
+
+  // Navigation functions
+  const navigateToNext = useCallback(() => {
+    if (!activePanel) {
+      setActivePanel(sections[0]);
+    } else {
+      setIsNavigating(true);
+      setPreviousPanel(activePanel);
+      const currentIndex = sections.indexOf(activePanel);
+      const nextIndex = (currentIndex + 1) % sections.length;
+      setActivePanel(sections[nextIndex]);
+      // Reset navigation state after component renders
+      setTimeout(() => {
+        setIsNavigating(false);
+        setPreviousPanel(null);
+      }, 50);
+    }
+  }, [activePanel, sections]);
+
+  const navigateToPrevious = useCallback(() => {
+    if (!activePanel) {
+      setActivePanel(sections[sections.length - 1]);
+    } else {
+      setIsNavigating(true);
+      setPreviousPanel(activePanel);
+      const currentIndex = sections.indexOf(activePanel);
+      const prevIndex = (currentIndex - 1 + sections.length) % sections.length;
+      setActivePanel(sections[prevIndex]);
+      // Reset navigation state after component renders
+      setTimeout(() => {
+        setIsNavigating(false);
+        setPreviousPanel(null);
+      }, 50);
+    }
+  }, [activePanel, sections]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+      const isCtrlOrCmd = isMac ? event.metaKey : event.ctrlKey;
+
+      if (isCtrlOrCmd && event.key === "i") {
+        event.preventDefault();
+        navigateToNext();
+      } else if (isCtrlOrCmd && event.key === "o") {
+        event.preventDefault();
+        navigateToPrevious();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigateToNext, navigateToPrevious]);
 
   // Check for mobile screen size on mount and window resize
   useEffect(() => {
@@ -249,19 +308,36 @@ export default function Home() {
 
       {/* Content panels that appear when cards are clicked */}
       <ProjectsPanel
-        isVisible={activePanel === "Projects"}
+        isVisible={
+          activePanel === "Projects" ||
+          (isNavigating && previousPanel === "Projects")
+        }
         onClose={() => setActivePanel(null)}
+        onNavigateNext={navigateToNext}
+        onNavigatePrevious={navigateToPrevious}
+        isNavigating={isNavigating}
       />
 
       <AboutMePanel
-        isVisible={activePanel === "About"}
+        isVisible={
+          activePanel === "About" || (isNavigating && previousPanel === "About")
+        }
         onClose={() => setActivePanel(null)}
+        onNavigateNext={navigateToNext}
+        onNavigatePrevious={navigateToPrevious}
+        isNavigating={isNavigating}
       />
 
       {/* Interests Panel */}
       <InterestsPanel
-        isVisible={activePanel === "Interests"}
+        isVisible={
+          activePanel === "Interests" ||
+          (isNavigating && previousPanel === "Interests")
+        }
         onClose={() => setActivePanel(null)}
+        onNavigateNext={navigateToNext}
+        onNavigatePrevious={navigateToPrevious}
+        isNavigating={isNavigating}
       />
 
       {isMobile && (

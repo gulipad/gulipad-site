@@ -5,6 +5,9 @@ import LinkPreviewBadge from "@/components/LinkPreviewBadge";
 interface InterestsPanelProps {
   isVisible: boolean;
   onClose: () => void;
+  onNavigateNext?: () => void;
+  onNavigatePrevious?: () => void;
+  isNavigating?: boolean;
 }
 
 interface Investment {
@@ -208,6 +211,9 @@ const people: Person[] = [
 const InterestsPanel: React.FC<InterestsPanelProps> = ({
   isVisible,
   onClose,
+  onNavigateNext,
+  onNavigatePrevious,
+  isNavigating = false,
 }) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -218,6 +224,15 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isVisible, onClose]);
+
+  // Check if on Mac for shortcut display
+  const isMac =
+    typeof navigator !== "undefined" &&
+    navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+  const modifierKey = isMac ? "⌘" : "Ctrl";
+
+  // Check if on mobile
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
   return (
     <motion.div
@@ -233,7 +248,10 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
         className="relative w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] bg-black/50 backdrop-blur-xl 
                    bg-gradient-to-br from-black/60 to-gray-900/60 text-white rounded-xl 
                    border border-white/20 shadow-2xl overflow-y-auto z-10 isolate m-4"
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{
+          opacity: 0,
+          scale: 0.95,
+        }}
         animate={{
           opacity: isVisible ? 1 : 0,
           scale: isVisible ? 1 : 0.95,
@@ -242,7 +260,7 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
           type: "spring",
           stiffness: 400,
           damping: 25,
-          duration: 0.1,
+          duration: isNavigating ? 0 : 0.1,
         }}
       >
         {/* Header */}
@@ -254,7 +272,34 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
                 "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 5%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%)",
             }}
           />
-          <div className="relative flex justify-end items-center pt-4">
+          <div className="relative flex justify-between items-center pt-4">
+            {/* Navigation buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={onNavigatePrevious}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-xl
+                           hover:bg-white/40 border border-white/10 transition-colors text-sm font-mono"
+                title={`Previous section (${modifierKey}O)`}
+              >
+                <span className="text-white/70">‹</span>
+                {!isMobile && (
+                  <span className="text-white/70">{modifierKey}O</span>
+                )}
+              </button>
+              <button
+                onClick={onNavigateNext}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-xl
+                           hover:bg-white/40 border border-white/10 transition-colors text-sm font-mono"
+                title={`Next section (${modifierKey}I)`}
+              >
+                {!isMobile && (
+                  <span className="text-white/70">{modifierKey}I</span>
+                )}
+                <span className="text-white/70">›</span>
+              </button>
+            </div>
+
+            {/* Close button */}
             <button
               onClick={onClose}
               className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-xl
