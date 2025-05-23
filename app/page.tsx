@@ -13,6 +13,7 @@ export default function Home() {
   const [memojiLoaded, setMemojiLoaded] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [previousPanel, setPreviousPanel] = useState<string | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -20,6 +21,11 @@ export default function Home() {
 
   // Define the navigation sections
   const sections = useMemo(() => ["Projects", "About", "Interests"], []);
+
+  // Handle mounting to prevent hydration mismatches
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Navigation functions
   const navigateToNext = useCallback(() => {
@@ -124,26 +130,49 @@ export default function Home() {
 
   // Define card configurations based on layout
   const cardConfigs = useMemo(() => {
+    if (!mounted) {
+      // Return empty array during SSR to prevent hydration mismatch
+      return [];
+    }
+
     if (isMobile) {
-      // Mobile layout - cards at top
+      // Mobile layout - simple order: external links, then interactive items
       return [
+        // Top row - external links
         {
           title: "Github",
           emoji: "github",
           linkUrl: "https://github.com/gulipad",
-          angle: 250,
-          distance: 47,
+          angle: 0,
+          distance: 0,
+          gridPosition: undefined,
+          mobileSection: "top",
           delay: 200,
           primaryColor: "255,99,71",
           secondaryColor: "255,127,80",
         },
         {
+          title: "X",
+          emoji: "x",
+          linkUrl: "https://x.com/GuliMoreno",
+          angle: 0,
+          distance: 0,
+          gridPosition: undefined,
+          mobileSection: "top",
+          delay: 1000,
+          primaryColor: "255,0,150",
+          secondaryColor: "0,255,255",
+        },
+        // Bottom row - interactive items
+        {
           title: "Projects",
           emoji: "hammer-and-wrench",
           onClick: () =>
             setActivePanel((prev) => (prev === "Projects" ? null : "Projects")),
-          angle: 280,
-          distance: 45,
+          angle: 0,
+          distance: 0,
+          gridPosition: undefined,
+          mobileSection: "bottom",
           delay: 600,
           primaryColor: "0,123,255",
           secondaryColor: "0,200,255",
@@ -153,21 +182,13 @@ export default function Home() {
           emoji: "book",
           onClick: () =>
             setActivePanel((prev) => (prev === "About" ? null : "About")),
-          angle: 25,
-          distance: 12,
+          angle: 0,
+          distance: 0,
+          gridPosition: undefined,
+          mobileSection: "bottom",
           delay: 800,
           primaryColor: "34,139,34",
           secondaryColor: "50,205,50",
-        },
-        {
-          title: "X",
-          emoji: "x",
-          linkUrl: "https://x.com/GuliMoreno",
-          angle: 110,
-          distance: 15,
-          delay: 1000,
-          primaryColor: "255,0,150",
-          secondaryColor: "0,255,255",
         },
         {
           title: "Interests",
@@ -176,9 +197,11 @@ export default function Home() {
             setActivePanel((prev) =>
               prev === "Interests" ? null : "Interests"
             ),
-          angle: 170,
-          distance: 20,
-          delay: 30,
+          angle: 0,
+          distance: 0,
+          gridPosition: undefined,
+          mobileSection: "bottom",
+          delay: 400,
           primaryColor: "138,43,226",
           secondaryColor: "186,85,211",
         },
@@ -192,6 +215,8 @@ export default function Home() {
           linkUrl: "https://github.com/gulipad",
           angle: 180,
           distance: 40,
+          gridPosition: undefined,
+          mobileSection: undefined,
           delay: 200,
           primaryColor: "255,99,71",
           secondaryColor: "255,127,80",
@@ -203,6 +228,8 @@ export default function Home() {
             setActivePanel((prev) => (prev === "Projects" ? null : "Projects")),
           angle: 270,
           distance: 40,
+          gridPosition: undefined,
+          mobileSection: undefined,
           delay: 600,
           primaryColor: "0,123,255",
           secondaryColor: "0,200,255",
@@ -214,6 +241,8 @@ export default function Home() {
             setActivePanel((prev) => (prev === "About" ? null : "About")),
           angle: 320,
           distance: 45,
+          gridPosition: undefined,
+          mobileSection: undefined,
           delay: 800,
           primaryColor: "34,139,34",
           secondaryColor: "50,205,50",
@@ -224,6 +253,8 @@ export default function Home() {
           linkUrl: "https://x.com/GuliMoreno",
           angle: 0,
           distance: 35,
+          gridPosition: undefined,
+          mobileSection: undefined,
           delay: 1000,
           primaryColor: "255,0,150",
           secondaryColor: "0,255,255",
@@ -237,13 +268,15 @@ export default function Home() {
             ),
           angle: 220,
           distance: 50,
+          gridPosition: undefined,
+          mobileSection: undefined,
           delay: 400,
           primaryColor: "138,43,226",
           secondaryColor: "186,85,211",
         },
       ];
     }
-  }, [isMobile]);
+  }, [isMobile, mounted]);
 
   return (
     <main
@@ -264,47 +297,113 @@ export default function Home() {
       />
 
       {/* Cards */}
-      {cardConfigs.map((config, index) => (
-        <CategoryCard
-          key={config.title}
-          title={config.title}
-          emoji={config.emoji}
-          onClick={config.onClick}
-          linkUrl={config.linkUrl}
-          angle={config.angle}
-          distance={config.distance}
-          isVisible={showCard}
-          delay={config.delay}
-          primaryColor={config.primaryColor}
-          secondaryColor={config.secondaryColor}
-        />
-      ))}
-
-      {/* Mobile layout: content at the bottom 
-          Desktop layout: content in center */}
-      <div
-        className={`
-          relative 
-          ${isMobile ? "absolute bottom-24 w-full" : ""}
-          flex flex-col items-center justify-center
-        `}
-      >
-        {/* Intro text */}
-        <IntroBox
-          text="Hi, this is Guli"
-          speed={100}
-          pauseAfter={stablePauseAfter}
-          onComplete={handleComplete}
-        />
-
-        {/* MemojiScrubber */}
-        <div className={`${isMobile ? "mt-4" : "mt-8"}`}>
-          <MemojiScrubber
-            onLoaded={() => setMemojiLoaded(true)}
-            displayMemoji={introComplete}
+      {mounted &&
+        !isMobile &&
+        cardConfigs.map((config, index) => (
+          <CategoryCard
+            key={config.title}
+            title={config.title}
+            emoji={config.emoji}
+            onClick={config.onClick}
+            linkUrl={config.linkUrl}
+            angle={config.angle}
+            distance={config.distance}
+            gridPosition={config.gridPosition}
+            isVisible={showCard}
+            delay={config.delay}
+            primaryColor={config.primaryColor}
+            secondaryColor={config.secondaryColor}
           />
+        ))}
+
+      {/* Mobile Grid Layout */}
+      {mounted && isMobile && (
+        <div className="flex flex-col items-center justify-center h-full py-8">
+          {/* Top Section - External Links */}
+          <div className="flex justify-center space-x-12 mb-20">
+            {cardConfigs
+              .filter((config) => config.mobileSection === "top")
+              .map((config, index) => (
+                <CategoryCard
+                  key={config.title}
+                  title={config.title}
+                  emoji={config.emoji}
+                  onClick={config.onClick}
+                  linkUrl={config.linkUrl}
+                  angle={0}
+                  distance={0}
+                  gridPosition={undefined}
+                  isVisible={showCard}
+                  delay={config.delay}
+                  primaryColor={config.primaryColor}
+                  secondaryColor={config.secondaryColor}
+                />
+              ))}
+          </div>
+
+          {/* Center Section - Content */}
+          <div className="flex flex-col items-center justify-center mb-12">
+            {/* Intro text */}
+            <IntroBox
+              text="Hi, this is Guli"
+              speed={100}
+              pauseAfter={stablePauseAfter}
+              onComplete={handleComplete}
+            />
+
+            {/* MemojiScrubber */}
+            <div className="mt-4">
+              <MemojiScrubber
+                onLoaded={() => setMemojiLoaded(true)}
+                displayMemoji={introComplete}
+              />
+            </div>
+          </div>
+
+          {/* Bottom Section - Interactive Items */}
+          <div className="flex justify-center space-x-10">
+            {cardConfigs
+              .filter((config) => config.mobileSection === "bottom")
+              .map((config, index) => (
+                <CategoryCard
+                  key={config.title}
+                  title={config.title}
+                  emoji={config.emoji}
+                  onClick={config.onClick}
+                  linkUrl={config.linkUrl}
+                  angle={0}
+                  distance={0}
+                  gridPosition={undefined}
+                  isVisible={showCard}
+                  delay={config.delay}
+                  primaryColor={config.primaryColor}
+                  secondaryColor={config.secondaryColor}
+                />
+              ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Desktop layout: content in center */}
+      {!isMobile && (
+        <div className="relative flex flex-col items-center justify-center">
+          {/* Intro text */}
+          <IntroBox
+            text="Hi, this is Guli"
+            speed={100}
+            pauseAfter={stablePauseAfter}
+            onComplete={handleComplete}
+          />
+
+          {/* MemojiScrubber */}
+          <div className="mt-8">
+            <MemojiScrubber
+              onLoaded={() => setMemojiLoaded(true)}
+              displayMemoji={introComplete}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Content panels that appear when cards are clicked */}
       <ProjectsPanel
@@ -340,15 +439,16 @@ export default function Home() {
         isNavigating={isNavigating}
       />
 
-      {isMobile && (
-        <div className="absolute bottom-12 w-full text-center text-gray-500 text-xs">
-          This site is better experienced on desktop.
-        </div>
-      )}
-
       {/* Footer */}
-      <footer className="absolute bottom-4 text-white text-sm">
-        Made with ❤️ in Madrid by Gulipad
+      <footer className="absolute bottom-4 w-full text-center">
+        {mounted && isMobile && (
+          <div className="text-gray-500 text-xs mb-2">
+            This site is better experienced on desktop.
+          </div>
+        )}
+        <div className="text-white text-sm">
+          Made with ❤️ in Madrid by Gulipad
+        </div>
       </footer>
     </main>
   );

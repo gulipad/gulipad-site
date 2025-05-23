@@ -13,6 +13,7 @@ type CategoryCardProps = {
 
   angle?: number; // in degrees
   distance?: number; // in vh
+  gridPosition?: { row: number; col: number; section?: string }; // For mobile grid layout
   isVisible?: boolean;
   delay?: number; // in ms
 
@@ -27,6 +28,7 @@ export default function CategoryCard({
   linkUrl,
   angle = 0,
   distance = 0,
+  gridPosition,
   isVisible = false,
   delay = 0,
   primaryColor = "255,0,150",
@@ -59,6 +61,9 @@ export default function CategoryCard({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // For desktop, use floating positioning. For mobile, use static positioning (handled by CSS Grid)
+  const useFloatingPosition = !isMobile && (angle !== 0 || distance !== 0);
+
   // Non-hover style
   const nonHoverShadow = `0 0 5px 2px rgba(${primaryColor},0.2), 0 0 10px 5px rgba(${secondaryColor},0.2)`;
   // Hover style
@@ -76,6 +81,21 @@ export default function CategoryCard({
       onClick();
     }
   };
+
+  // Calculate grid position for mobile
+  const gridX = gridPosition ? `${(gridPosition.col - 1) * 70 - 35}px` : "0px";
+  const gridY = gridPosition
+    ? gridPosition.section === "top"
+      ? `${-140}px` // Above center
+      : gridPosition.section === "bottom"
+      ? `${140}px` // Below center
+      : "0px" // Default/desktop
+    : "0px";
+
+  // Use grid positioning for mobile, floating for desktop
+  const isGridLayout = isMobile && gridPosition;
+  const positionX = isGridLayout ? gridX : x;
+  const positionY = isGridLayout ? gridY : y;
 
   return (
     <motion.div
@@ -112,10 +132,10 @@ export default function CategoryCard({
         },
       }}
       style={{
-        position: "absolute",
-        top: `calc(50% + ${y})`,
-        left: `calc(50% + ${x})`,
-        transform: "translate(-50%, -50%)",
+        position: useFloatingPosition ? "absolute" : "relative",
+        top: useFloatingPosition ? `calc(50% + ${y})` : "auto",
+        left: useFloatingPosition ? `calc(50% + ${x})` : "auto",
+        transform: useFloatingPosition ? "translate(-50%, -50%)" : "none",
         zIndex: hover ? 10 : 1, // Ensure hovered cards are on top
       }}
     >
@@ -137,7 +157,7 @@ export default function CategoryCard({
         className="
           relative
           group
-          w-18 h-18
+          w-16 h-16 sm:w-18 sm:h-18
           bg-gray-300
           border border-white
           rounded-lg
@@ -145,13 +165,13 @@ export default function CategoryCard({
           items-center
           justify-center
           text-gray-800
-          p-4
+          p-2 sm:p-4
         "
       >
         <motion.img
           src={`/icons/${emoji}.png`}
           alt={emoji}
-          className="text-lg"
+          className="text-lg w-7 h-7 sm:w-8 sm:h-8"
           whileHover={{ scale: 1.2 }}
           transition={{
             type: "spring",

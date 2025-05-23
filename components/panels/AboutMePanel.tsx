@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import LinkPreviewBadge from "@/components/LinkPreviewBadge";
 
@@ -24,6 +24,23 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
   onNavigatePrevious,
   isNavigating = false,
 }) => {
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setIsMac(navigator.platform.toUpperCase().indexOf("MAC") >= 0);
+    setIsMobile(window.innerWidth < 768);
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" && isVisible) {
@@ -34,14 +51,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isVisible, onClose]);
 
-  // Check if on Mac for shortcut display
-  const isMac =
-    typeof navigator !== "undefined" &&
-    navigator.platform.toUpperCase().indexOf("MAC") >= 0;
   const modifierKey = isMac ? "⌘" : "Ctrl";
-
-  // Check if on mobile
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
   return (
     <motion.div
@@ -91,7 +101,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
                 title={`Previous section (${modifierKey}O)`}
               >
                 <span className="text-white/70">‹</span>
-                {!isMobile && (
+                {mounted && !isMobile && (
                   <span className="text-white/70">{modifierKey}O</span>
                 )}
               </button>
@@ -101,7 +111,7 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
                            hover:bg-white/40 border border-white/10 transition-colors text-sm font-mono"
                 title={`Next section (${modifierKey}I)`}
               >
-                {!isMobile && (
+                {mounted && !isMobile && (
                   <span className="text-white/70">{modifierKey}I</span>
                 )}
                 <span className="text-white/70">›</span>

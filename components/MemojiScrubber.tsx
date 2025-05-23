@@ -20,8 +20,24 @@ export default function MemojiScrubber({
   const [currentFrame, setCurrentFrame] = useState(130);
   const [targetFrame, setTargetFrame] = useState(130);
   const [allFramesLoaded, setAllFramesLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
+
+  // Check for mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Get responsive canvas size
+  const canvasSize = isMobile ? 140 : 220;
 
   // Preload all images and store them in imagesRef.
   useEffect(() => {
@@ -56,7 +72,7 @@ export default function MemojiScrubber({
         }
       })
       .catch((err) => console.error(err));
-  }, [onLoaded]);
+  }, [onLoaded, canvasSize]);
 
   // Animation loop: smoothly interpolate currentFrame toward targetFrame using the shortest path.
   useEffect(() => {
@@ -123,13 +139,13 @@ export default function MemojiScrubber({
 
   // Render: always reserve a 220×220 container.
   return (
-    <div className="relative" style={{ width: 220, height: 220 }}>
+    <div className="relative" style={{ width: canvasSize, height: canvasSize }}>
       {displayMemoji ? (
         allFramesLoaded ? (
           <motion.canvas
             ref={canvasRef}
-            width={220}
-            height={220}
+            width={canvasSize}
+            height={canvasSize}
             className="select-none"
             initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
