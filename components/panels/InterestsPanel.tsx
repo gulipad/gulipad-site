@@ -32,6 +32,14 @@ interface Person {
   isBlocked?: boolean;
 }
 
+interface EarlyAdopter {
+  name: string;
+  dateJoined: string;
+  link: string;
+  description: string;
+  isBlocked?: boolean;
+}
+
 // Other potential sections to add:
 // - Tools I use: Development environment, productivity apps, hardware setup
 // - In the press: Media mentions, interviews, articles
@@ -164,6 +172,65 @@ const investments: Investment[] = [
       "A diversified portfolio with bonds, variable and mixed income funds. Focus in US.",
     link: "https://arc.net/folder/3AAD1A02-32C6-49E6-8C4E-08D8F8E83B79",
     tags: ["Bonds", "Variable income", "Mixed income"],
+  },
+];
+
+const earlyAdopters: EarlyAdopter[] = [
+  {
+    name: "Facebook",
+    dateJoined: "Jun '06",
+    link: "",
+    description:
+      "Was a 13-year-old living in the east coast of the US. Myspace was all the rage back then.",
+  },
+  {
+    name: "Reddit",
+    dateJoined: "Mar '11",
+    link: "",
+    description:
+      "I joined Reddit as a teenager in Spain. Was the only Spanish user I knew for a very long time.",
+  },
+  {
+    name: "Notion",
+    dateJoined: "Jan '20",
+    link: "https://notion.so/",
+    description:
+      "Not sure if really early adopter, but moved whole company to it in 2020.",
+  },
+  {
+    name: "Ramp",
+    dateJoined: "Jul '20",
+    link: "https://ramp.com/",
+    description:
+      "Was an early Ramp user. Karim was an investor in Capchase, so we became users of their product.",
+  },
+  {
+    name: "Linear",
+    dateJoined: "Jul '20",
+    link: "https://linear.app/",
+    description:
+      "Was a pretty early user of Linear. Brought the Capchase tech team to it when we started the company. Still have nightmares about Jira.",
+  },
+  {
+    name: "Arc Browser",
+    dateJoined: "Oct '22",
+    link: "https://arc.net/",
+    description:
+      "Became a pretty early adopter of Arc. I was later invited to the Dia beta, but didn't stick.",
+  },
+  {
+    name: "ChatGPT",
+    dateJoined: "Dec '22",
+    link: "",
+    description:
+      "Was playing with GPT since it was available via API with GPT-2. Was one of the early users when it came out outside the API.",
+  },
+  {
+    name: "Cursor",
+    dateJoined: "Sep '23",
+    link: "https://cursor.com/",
+    description:
+      "Joined pretty early on before the vibe-coding trend; pushed my tech team on it.",
   },
 ];
 
@@ -377,33 +444,6 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
               </div>
             </div>
 
-            {/* People Section */}
-            <div>
-              <h2 className="text-3xl font-bold mb-4">Interesting People 🧠</h2>
-              <hr className="border-gray-700 my-4" />
-              <p className="mb-4">
-                Thinkers, founders, and innovators whose writings I follow and
-                admire.
-              </p>
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
-                <div className="space-y-4">
-                  {people.map((person, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <LinkPreviewBadge
-                        link={person.link}
-                        display={person.name}
-                        isBlocked={person.isBlocked}
-                      />
-                      <span className="text-gray-400">→</span>
-                      <span className="text-sm text-gray-300">
-                        {person.description}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             {/* Articles */}
             <div>
               <h2 className="text-3xl font-bold mb-4">Startup Articles 🚀</h2>
@@ -427,6 +467,82 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
                     </li>
                   ))}
                 </ul>
+              </div>
+            </div>
+
+            {/* Early Adopter Section */}
+            <div>
+              <h2 className="text-3xl font-bold mb-4">Early Adopter 🚀</h2>
+              <hr className="border-gray-700 my-4" />
+              <p className="mb-4">
+                Tools and platforms I jumped on early and have been using since
+                their early days.
+              </p>
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {earlyAdopters.map((adopter, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-700/30 backdrop-blur-sm rounded-lg border border-gray-600/50 p-4 hover:bg-gray-700/50 transition-colors"
+                    >
+                      <div className="flex flex-col h-full">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="text-lg font-semibold text-white">
+                            {adopter.name}
+                          </h3>
+                          {adopter.link && (
+                            <LinkPreviewBadge
+                              link={adopter.link}
+                              display="↗"
+                              isBlocked={adopter.isBlocked}
+                            />
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-300 mb-3 flex-grow">
+                          {adopter.description}
+                        </p>
+                        <div className="mt-auto">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                            Since {adopter.dateJoined}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* People Section */}
+            <div>
+              <h2 className="text-3xl font-bold mb-4">Interesting People 🧠</h2>
+              <hr className="border-gray-700 my-4" />
+              <p className="mb-4">
+                Thinkers, founders, and innovators whose writings I follow and
+                admire. You can also see who I follow on{" "}
+                <LinkPreviewBadge
+                  link="https://x.com/gulimoreno/following"
+                  display="X/Twitter"
+                  isBlocked={true}
+                />
+                .
+              </p>
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
+                <div className="space-y-4">
+                  {people.map((person, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <LinkPreviewBadge
+                        link={person.link}
+                        display={person.name}
+                        isBlocked={person.isBlocked}
+                      />
+                      <span className="text-gray-400">→</span>
+                      <span className="text-sm text-gray-300">
+                        {person.description}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
