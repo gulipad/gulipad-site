@@ -98,21 +98,21 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
                 onClick={onNavigatePrevious}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-xl
                            hover:bg-white/40 border border-white/10 transition-colors text-sm font-mono"
-                title={`Previous section (${modifierKey}O)`}
+                title={`Previous section (${modifierKey}I)`}
               >
                 <span className="text-white/70">‹</span>
                 {mounted && !isMobile && (
-                  <span className="text-white/70">{modifierKey}O</span>
+                  <span className="text-white/70">{modifierKey}I</span>
                 )}
               </button>
               <button
                 onClick={onNavigateNext}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-xl
                            hover:bg-white/40 border border-white/10 transition-colors text-sm font-mono"
-                title={`Next section (${modifierKey}I)`}
+                title={`Next section (${modifierKey}O)`}
               >
                 {mounted && !isMobile && (
-                  <span className="text-white/70">{modifierKey}I</span>
+                  <span className="text-white/70">{modifierKey}O</span>
                 )}
                 <span className="text-white/70">›</span>
               </button>
