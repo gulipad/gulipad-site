@@ -135,9 +135,9 @@ const articles: Article[] = [
 
 const investments: Investment[] = [
   {
-    title: "throxy (YC X25)",
+    title: "throxy",
     subtitle:
-      "throxy is building vertical AI agents that book meetings for companies selling into traditional industries.",
+      "throxy (YC X25) is building vertical AI agents that book meetings for companies selling into traditional industries.",
     link: "https://throxy.com/",
     tags: ["Pre-seed Investment", "2025"],
     isBlocked: true,
