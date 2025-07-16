@@ -135,6 +135,14 @@ const articles: Article[] = [
 
 const investments: Investment[] = [
   {
+    title: "Zinco",
+    subtitle:
+      "Zinco is building an AI-powered CFO/COO that quietly runs the entire back office for small and medium sized businesses.",
+    link: "https://www.zinco.ai",
+    tags: ["Pre-seed Investment", "2025"],
+    isBlocked: true,
+  },
+  {
     title: "throxy",
     subtitle:
       "throxy (YC X25) is building vertical AI agents that book meetings for companies selling into traditional industries.",
