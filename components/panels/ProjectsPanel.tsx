@@ -212,7 +212,9 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
         </div>
 
         {/* Content */}
-        <h1 className="text-6xl font-bold text-center py-8">I ❤️ to Build</h1>
+        <h1 className="text-6xl font-bold text-center py-8 mt-4">
+          I ❤️ to Build
+        </h1>
         <div className="px-6 py-8 sm:px-8">
           <div className="max-w-4xl mx-auto space-y-8">
             {/* Introduction Section */}

@@ -135,6 +135,14 @@ const articles: Article[] = [
 
 const investments: Investment[] = [
   {
+    title: "Quiver",
+    subtitle:
+      "Quiver is building foundational models for image-as-code starting with state of the art SVG generation. Based on StarVector, created by Quiver's founders.",
+    link: "https://starvector.github.io/",
+    tags: ["Pre-seed Investment", "2025"],
+    isBlocked: true,
+  },
+  {
     title: "Zinco",
     subtitle:
       "Zinco is building an AI-powered CFO/COO that quietly runs the entire back office for small and medium sized businesses.",
@@ -404,7 +412,9 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
         </div>
 
         {/* Content */}
-        <h1 className="text-6xl font-bold text-center py-8">Random Stuff</h1>
+        <h1 className="text-6xl font-bold text-center py-8 mt-4">
+          Random Stuff
+        </h1>
         <div className="px-6 py-8 sm:px-8">
           <div className="max-w-4xl mx-auto space-y-8">
             {/* Introduction Section */}

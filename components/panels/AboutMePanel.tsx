@@ -130,7 +130,9 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
         </div>
 
         {/* Content */}
-        <h1 className="text-6xl font-bold text-center py-8">Guli's Handbook</h1>
+        <h1 className="text-6xl font-bold text-center py-8 mt-4">
+          Guli's Handbook
+        </h1>
         <div className="px-6 py-8 sm:px-8">
           <div className="max-w-4xl mx-auto space-y-8">
             {/* Introduction Section */}
@@ -641,13 +643,15 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
                 comms can become a massive bottleneck if not carefully
                 considered. I've created{" "}
                 <LinkPreviewBadge
-                  link="https://file.notion.so/f/f/c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82/bac5c8c6-b946-49e3-b3e2-a2aec358785a/On_Write-Ups_(2).pdf?table=block&id=3752d168-1c69-4ea4-aeb3-1a0da57263c0&spaceId=c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82&expirationTimestamp=1741564800000&signature=nEa5j0U2s7mnik3CJu8Ok4J_hbdXLh8dC-nV3hY_rdQ&downloadName=On_Write-Ups.pdf"
+                  link="https://drive.google.com/file/d/1zUXmf_em2o92NLjrWDlFaVkAgP4-ZkOw/view?usp=sharing"
                   display="many"
+                  isBlocked={true}
                 />{" "}
                 documents around{" "}
                 <LinkPreviewBadge
-                  link="https://file.notion.so/f/f/c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82/d5aefa48-9606-47a9-8dbf-efba8e80d01a/Base_Rules_for_Using_Notion.pdf?table=block&id=7063b185-efa0-4e32-9517-f9ce69e249b3&spaceId=c6a23e07-c6fd-49bc-9ca4-e9a2d0522c82&expirationTimestamp=1741564800000&signature=xDfjKbNj7B_EvMdDdhOgD1HQoQWNUwAOxXiphw6GNkw&downloadName=Base+Rules+for+Using+Notion.pdf"
+                  link="https://drive.google.com/file/d/10Krl3fz40kGRTmNIMpxgILHzxtB_ZVVm/view?usp=sharing"
                   display="this"
+                  isBlocked={true}
                 />
                 .
               </div>{" "}
