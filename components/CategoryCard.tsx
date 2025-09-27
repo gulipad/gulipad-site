@@ -44,6 +44,11 @@ export default function CategoryCard({
   const smallOffset = useRef(Math.random() * (0.4 - 0.1) + 0.1).current;
   const bigOffset = useRef(Math.random() * (4 - 1) + 1).current;
 
+  // Generate unique starting offsets for initial animation state
+  const rotationOffset = useRef(Math.random() * 14 - 7).current; // -7 to +7 degrees
+  const yPositionOffset = useRef(Math.random() * 6 - 3).current; // -3 to +3 for variety
+  const bobbingPhaseOffset = useRef(Math.random()).current; // 0 to 1 for bobbing cycle position
+
   // Track hover state
   const [hover, setHover] = useState(false);
   // Track if we're on a mobile device
@@ -97,6 +102,21 @@ export default function CategoryCard({
   const positionX = isGridLayout ? gridX : x;
   const positionY = isGridLayout ? gridY : y;
 
+  // Calculate unique starting values for animation - separate from positioning
+  const initialRotation = rotationOffset; // Pure randomization for rotation animation
+  const baseYOffset = bigOffset + yPositionOffset; // Base y-offset for bobbing animation
+
+  // Calculate bobbing cycle positions - each card starts at different point in sine wave
+  const bobbingAmplitude = 5; // How much the card bobs up/down
+  const phase1 =
+    baseYOffset + Math.sin(bobbingPhaseOffset * Math.PI * 2) * bobbingAmplitude;
+  const phase2 =
+    baseYOffset +
+    Math.sin((bobbingPhaseOffset + 0.33) * Math.PI * 2) * bobbingAmplitude;
+  const phase3 =
+    baseYOffset +
+    Math.sin((bobbingPhaseOffset + 0.66) * Math.PI * 2) * bobbingAmplitude;
+
   return (
     <motion.div
       // Start invisible
@@ -107,8 +127,13 @@ export default function CategoryCard({
           ? {
               scale: 1, // baseline scale from 0 → 1
               opacity: 1,
-              y: [bigOffset, bigOffset - 5, bigOffset],
-              rotate: [0, 5, -5, 0],
+              y: [phase1, phase2, phase3],
+              rotate: [
+                initialRotation,
+                initialRotation + 5,
+                initialRotation - 5,
+                initialRotation,
+              ],
             }
           : { scale: 0, opacity: 0, rotate: 0 }
       }
