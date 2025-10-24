@@ -135,6 +135,22 @@ const articles: Article[] = [
 
 const investments: Investment[] = [
   {
+    title: "Mito",
+    subtitle:
+      "Mito is building a collaborative platform for video creation. Led by Iñaki Berenguer and Danny Saltaren.",
+    link: "https://mito.ai/",
+    tags: ["Seed Investment", "2025"],
+    isBlocked: true,
+  },
+  {
+    title: "InfiniteWatch",
+    subtitle:
+      "InfiniteWatch is building an observability platform for web, AI agents, and voice interactions. By CoverWallet's ex-CTOs.",
+    link: "https://www.infinitewatch.ai/",
+    tags: ["Seed Investment", "2025"],
+    isBlocked: true,
+  },
+  {
     title: "Quiver",
     subtitle:
       "Quiver is building foundational models for image-as-code starting with state of the art SVG generation. Based on StarVector, created by Quiver's founders.",
