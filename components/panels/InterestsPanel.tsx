@@ -136,8 +136,7 @@ const articles: Article[] = [
 const investments: Investment[] = [
   {
     title: "Mito",
-    subtitle:
-      "Mito is building a collaborative platform for video creation. Led by Iñaki Berenguer and Danny Saltaren.",
+    subtitle: "Mito is building a collaborative platform for video creation.",
     link: "https://mito.ai/",
     tags: ["Seed Investment", "2025"],
     isBlocked: true,
@@ -145,7 +144,7 @@ const investments: Investment[] = [
   {
     title: "InfiniteWatch",
     subtitle:
-      "InfiniteWatch is building an observability platform for web, AI agents, and voice interactions. By CoverWallet's ex-CTOs.",
+      "InfiniteWatch is building an observability platform for web, AI agents, and voice interactions. Led by CoverWallet's ex-CTOs.",
     link: "https://www.infinitewatch.ai/",
     tags: ["Seed Investment", "2025"],
     isBlocked: true,
