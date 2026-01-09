@@ -190,6 +190,21 @@ const investments: Investment[] = [
     isBlocked: true,
   },
   {
+    title: "BlueWalker Capital",
+    subtitle:
+      "BlueWalker Capital is building the infra for a prediction markets native hedge fund.",
+    link: "https://bluewalker.capital/",
+    tags: ["Pre-seed Investment", "2025"],
+    isBlocked: true,
+  },
+  {
+    title: "Traza",
+    subtitle: "Traza is building agents for the logistics space.",
+    link: "https://traza.ai/",
+    tags: ["Pre-seed Investment", "2025"],
+    isBlocked: true,
+  },
+  {
     title: "Project Europe",
     subtitle:
       "Project Europe is fund by 20VC to support next-gen technical builders.",
