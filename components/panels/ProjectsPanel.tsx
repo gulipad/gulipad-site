@@ -42,6 +42,12 @@ const projects: Project[] = [
     link: "https://www.goexponential.org/",
   },
   {
+    title: "Ateneo",
+    image: "ateneo_logo.png",
+    tags: ["Non-profit", "Co-founder", "Spain"],
+    link: "https://ateneo.goexponential.org/",
+  },
+  {
     title: "A Good Date Picker",
     image: "date-picker.png",
     tags: ["Open Source", "TypeScript", "React"],
@@ -329,6 +335,27 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                         )}
 
                         {index === 2 && (
+                          <div className="text-gray-300 text-sm">
+                            <p className="mb-2">
+                              A private, independent forum for exceptional
+                              Spanish founders to share knowledge and accelerate
+                              Spain's tech ecosystem:
+                            </p>
+                            <ul className="list-disc list-inside space-y-1">
+                              <li>
+                                Strictly founders only — no VCs, employees, or
+                                corporate backing.
+                              </li>
+                              <li>
+                                High-trust environment for sharing best
+                                practices, leadership lessons, and curated
+                                recommendations.
+                              </li>
+                            </ul>
+                          </div>
+                        )}
+
+                        {index === 3 && (
                           <div className="text-gray-300 text-sm">
                             <p className="mb-2">
                               A modern take on date pickers that lets users type
