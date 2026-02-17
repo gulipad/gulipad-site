@@ -377,7 +377,11 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                                 WebGL rendering.
                               </li>
                               <li>
-                                Nine interactive 3D scenes with parallax,
+                                3D scenes captured with Apple SHARP and
+                                rendered as Gaussian Splats in the browser.
+                              </li>
+                              <li>
+                                Nine interactive scenes with parallax,
                                 pinch-to-zoom, and bilingual support.
                               </li>
                             </ul>
