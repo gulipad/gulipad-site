@@ -48,6 +48,12 @@ const projects: Project[] = [
     link: "https://ateneo.goexponential.org/",
   },
   {
+    title: "Kyriku 3D",
+    image: "kyriku.jpg",
+    tags: ["Pro-bono", "3D", "Next.js"],
+    link: "https://kyriku.vercel.app/",
+  },
+  {
     title: "A Good Date Picker",
     image: "date-picker.png",
     tags: ["Open Source", "TypeScript", "React"],
@@ -356,6 +362,29 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                         )}
 
                         {index === 3 && (
+                          <div className="text-gray-300 text-sm">
+                            <p className="mb-2">
+                              A 3D Gaussian Splat viewer documenting{" "}
+                              <LinkPreviewBadge
+                                link="https://kyriku.org/"
+                                display="Kyriku"
+                              />
+                              's humanitarian work in Ngozi, Burundi:
+                            </p>
+                            <ul className="list-disc list-inside space-y-1">
+                              <li>
+                                Built with Next.js and PlayCanvas for immersive
+                                WebGL rendering.
+                              </li>
+                              <li>
+                                Nine interactive 3D scenes with parallax,
+                                pinch-to-zoom, and bilingual support.
+                              </li>
+                            </ul>
+                          </div>
+                        )}
+
+                        {index === 4 && (
                           <div className="text-gray-300 text-sm">
                             <p className="mb-2">
                               A modern take on date pickers that lets users type
