@@ -42,13 +42,6 @@ const projects: Project[] = [
     link: "https://www.goexponential.org/",
   },
   {
-    title: "Carlo",
-    image: "carlo.png",
-    tags: ["Non-profit", "Creator"],
-    link: "https://wa.me/message/USMSLYHXBELEI1",
-    isBlocked: true,
-  },
-  {
     title: "A Good Date Picker",
     image: "date-picker.png",
     tags: ["Open Source", "TypeScript", "React"],
@@ -57,6 +50,14 @@ const projects: Project[] = [
 ];
 
 const otherProjects: OtherProject[] = [
+  {
+    title: "Carlo",
+    description:
+      "A WhatsApp bot that sends the daily Gospel and Saints to its users. Inspired by Saint Carlo Acutis. Can't guarantee it's working — stopped supporting it as AI got much better.",
+    tags: ["Non-profit", "Semi-deprecated"],
+    link: "https://wa.me/message/USMSLYHXBELEI1",
+    isBlocked: true,
+  },
   {
     title: "Comgo",
     description:
@@ -328,25 +329,6 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                         )}
 
                         {index === 2 && (
-                          <div className="text-gray-300 text-sm">
-                            <p className="mb-2">
-                              Carlo is a Whatsapp bot that sends the daily
-                              Gospel and Saints to its users. It was born as a
-                              personal exploration of building with AI, and the
-                              concept of Faith.
-                            </p>
-                            <ul className="list-disc list-inside space-y-1">
-                              <li>It's built on Supabase Edge Functions.</li>
-                              <li>Its brain is powered by Google Gemini.</li>
-                            </ul>
-                            <p className="mb-2">
-                              Inspired by Saint Carlo Acutis, patron Saint of
-                              the internet.
-                            </p>
-                          </div>
-                        )}
-
-                        {index === 3 && (
                           <div className="text-gray-300 text-sm">
                             <p className="mb-2">
                               A modern take on date pickers that lets users type
