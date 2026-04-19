@@ -194,6 +194,15 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
                   thousands of years of runway. We are ~100 on the team.
                 </li>
                 <li>
+                  I'm a scout for{" "}
+                  <LinkPreviewBadge
+                    link="https://a16z.com/"
+                    display="a16z"
+                    isBlocked={true}
+                  />
+                  , actively investing in founders with Spanish roots.
+                </li>
+                <li>
                   I help young Spaniards land in US startups through the{" "}
                   <LinkPreviewBadge
                     link="https://www.goexponential.org/"
