@@ -111,6 +111,14 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
     }
   }
 
+  const blockedBy = (() => {
+    try {
+      return new URL(link).hostname.replace(/^www\./, "");
+    } catch {
+      return "origin";
+    }
+  })();
+
   return (
     <span
       className="inline-block"
@@ -199,7 +207,7 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
               </div>
             ) : (
               <div className="bg-white text-gray-600 text-xs shadow-sm border border-gray-200 rounded-md px-2.5 py-1">
-                Preview blocked by origin
+                Preview blocked by <strong className="font-semibold">{blockedBy}</strong>
               </div>
             )}
           </div>,
