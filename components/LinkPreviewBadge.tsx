@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ExternalLink } from "lucide-react";
 import Spinner from "@/components/Spinner";
@@ -25,7 +25,6 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   const [coords, setCoords] = useState({ x: 0, y: 0, width: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(isBlocked);
-  const [hoverStart, setHoverStart] = useState<number | null>(null);
   const [previewPosition, setPreviewPosition] = useState<"left" | "right">(
     "right"
   );
@@ -71,7 +70,6 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   }, [showPreview]);
 
   function handleMouseEnter(e: React.MouseEvent<HTMLSpanElement>) {
-    setHoverStart(Date.now());
     setShowPreview(true);
 
     const rect = e.currentTarget.getBoundingClientRect();
@@ -103,7 +101,6 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   function resetPreviewState() {
     setIsLoaded(false);
     setLoadError(isBlocked);
-    setHoverStart(null);
   }
 
   function handlePreviewClick() {
@@ -175,10 +172,10 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
                       pointerEvents: "none",
                     }}
                     onLoad={(e) => {
-                      if (hoverStart && Date.now() - hoverStart < 200) {
-                        setLoadError(true);
-                        return;
-                      }
+                      // Cross-origin access throws a SecurityError, which is
+                      // the success case: the frame loaded from another origin
+                      // and we can't read it. Only same-origin reads let us
+                      // detect Chrome's "refused to connect" error page.
                       try {
                         const iframe = e.currentTarget;
                         const doc =
@@ -189,12 +186,12 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
                           doc.body.innerText.toLowerCase().includes("refused")
                         ) {
                           setLoadError(true);
-                        } else {
-                          setIsLoaded(true);
+                          return;
                         }
-                      } catch (err) {
-                        setIsLoaded(true);
+                      } catch {
+                        /* cross-origin — frame loaded successfully */
                       }
+                      setIsLoaded(true);
                     }}
                     onError={() => setLoadError(true)}
                   />
