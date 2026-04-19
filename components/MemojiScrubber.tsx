@@ -18,11 +18,16 @@ export default function MemojiScrubber({
 }: MemojiScrubberProps) {
   // Default frame (zero-indexed 130 corresponds to frame 131)
   const [currentFrame, setCurrentFrame] = useState(130);
-  const [targetFrame, setTargetFrame] = useState(130);
   const [allFramesLoaded, setAllFramesLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
+  const targetFrameRef = useRef(130);
+  const velocityRef = useRef(0);
+  // Cursor distance from screen center; governs how strongly we pull toward
+  // targetFrame. Starts at Infinity so behavior is normal before first move.
+  const radiusRef = useRef(Infinity);
+  const lastTimeRef = useRef<number | null>(null);
 
   // Check for mobile screen size
   useEffect(() => {
@@ -74,24 +79,45 @@ export default function MemojiScrubber({
       .catch((err) => console.error(err));
   }, [onLoaded, canvasSize]);
 
-  // Animation loop: smoothly interpolate currentFrame toward targetFrame using the shortest path.
+  // Animation loop: critically-damped spring toward targetFrame, with a
+  // deadband near the radial center where atan2 is unstable.
   useEffect(() => {
+    const STIFFNESS = 120;
+    const DAMPING = 22; // ~2 * sqrt(STIFFNESS), critically damped
+    const DEADBAND = 120; // px; full pull kicks in beyond this radius
+    const MAX_DT = 1 / 30; // clamp spikes (e.g. backgrounded tab)
+
     let animationFrameId: number;
-    const animate = () => {
+    const animate = (now: number) => {
+      const last = lastTimeRef.current;
+      lastTimeRef.current = now;
+      const dt = last == null ? 0 : Math.min((now - last) / 1000, MAX_DT);
+
       setCurrentFrame((prev) => {
-        let diff = targetFrame - prev;
+        let diff = targetFrameRef.current - prev;
         if (diff > TOTAL_FRAMES / 2) diff -= TOTAL_FRAMES;
         else if (diff < -TOTAL_FRAMES / 2) diff += TOTAL_FRAMES;
-        if (Math.abs(diff) < 0.01) return targetFrame;
-        let newFrame = prev + diff * 0.1;
-        newFrame = ((newFrame % TOTAL_FRAMES) + TOTAL_FRAMES) % TOTAL_FRAMES;
-        return newFrame;
+
+        const pullWeight = Math.min(1, radiusRef.current / DEADBAND);
+        const accel =
+          STIFFNESS * diff * pullWeight - DAMPING * velocityRef.current;
+        velocityRef.current += accel * dt;
+
+        if (Math.abs(diff) < 0.01 && Math.abs(velocityRef.current) < 0.01) {
+          velocityRef.current = 0;
+          return targetFrameRef.current;
+        }
+
+        let next = prev + velocityRef.current * dt;
+        next = ((next % TOTAL_FRAMES) + TOTAL_FRAMES) % TOTAL_FRAMES;
+        return next;
       });
+
       animationFrameId = requestAnimationFrame(animate);
     };
     animationFrameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [targetFrame]);
+  }, []);
 
   // Update targetFrame based on mouse or touch position.
   useEffect(() => {
@@ -100,12 +126,13 @@ export default function MemojiScrubber({
       const centerY = window.innerHeight / 2;
       const dx = clientX - centerX;
       const dy = clientY - centerY;
+      radiusRef.current = Math.hypot(dx, dy);
       let angle = Math.atan2(dy, dx) - Math.PI;
       if (angle < 0) angle += 2 * Math.PI;
       const degrees = angle * (180 / Math.PI);
       let frame = Math.floor(degrees * (TOTAL_FRAMES / 360));
       if (frame >= TOTAL_FRAMES) frame = TOTAL_FRAMES - 1;
-      setTargetFrame(frame);
+      targetFrameRef.current = frame;
     };
 
     const handleMouseMove = (e: MouseEvent) =>
