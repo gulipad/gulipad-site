@@ -258,6 +258,7 @@ const earlyAdopters: EarlyAdopter[] = [
     link: "https://notion.so/",
     description:
       "Not sure if really early adopter, but moved whole company to it in 2020.",
+    isBlocked: true,
   },
   {
     name: "Ramp",
@@ -265,6 +266,7 @@ const earlyAdopters: EarlyAdopter[] = [
     link: "https://ramp.com/",
     description:
       "Was an early Ramp user. Karim was an investor in Capchase, so we became users of their product.",
+    isBlocked: true,
   },
   {
     name: "Linear",
@@ -272,6 +274,7 @@ const earlyAdopters: EarlyAdopter[] = [
     link: "https://linear.app/",
     description:
       "Was a pretty early user of Linear. Brought the Capchase tech team to it when we started the company. Still have nightmares about Jira.",
+    isBlocked: true,
   },
   {
     name: "Arc Browser",
@@ -293,6 +296,7 @@ const earlyAdopters: EarlyAdopter[] = [
     link: "https://cursor.com/",
     description:
       "Joined pretty early on before the vibe-coding trend; pushed my tech team on it.",
+    isBlocked: true,
   },
 ];
 
