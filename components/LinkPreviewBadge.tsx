@@ -114,15 +114,6 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
     }
   }
 
-  // Extract domain from the link
-  const getDomain = (url: string) => {
-    try {
-      return new URL(url).hostname;
-    } catch (e) {
-      return "This site";
-    }
-  };
-
   return (
     <span
       className="inline-block"
@@ -210,12 +201,8 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="w-80 bg-white text-black shadow-lg border border-gray-300 rounded-md p-4">
-                <p className="text-sm font-medium">Preview Unavailable</p>
-                <p className="text-xs text-gray-600 mt-1">
-                  {getDomain(link)} either blocks embedding or could not be
-                  loaded.
-                </p>
+              <div className="bg-white text-gray-600 text-xs shadow-sm border border-gray-200 rounded-md px-2.5 py-1">
+                Preview blocked by origin
               </div>
             )}
           </div>,
