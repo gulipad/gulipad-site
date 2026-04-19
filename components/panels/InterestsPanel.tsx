@@ -135,10 +135,18 @@ const articles: Article[] = [
 
 const investments: Investment[] = [
   {
+    title: "Causa Prima",
+    subtitle:
+      "Causa Prima is building the agentic rails for XXIst century AP and AR.",
+    link: "https://causaprima.ai/",
+    tags: ["Pre-seed Investment", "2026"],
+    isBlocked: true,
+  },
+  {
     title: "Mito",
     subtitle: "Mito is building a collaborative platform for video creation.",
     link: "https://mito.ai/",
-    tags: ["Seed Investment", "2025"],
+    tags: ["Seed Investment", "2026"],
     isBlocked: true,
   },
   {
@@ -146,7 +154,7 @@ const investments: Investment[] = [
     subtitle:
       "InfiniteWatch is building an observability platform for web, AI agents, and voice interactions. Led by CoverWallet's ex-CTOs.",
     link: "https://www.infinitewatch.ai/",
-    tags: ["Seed Investment", "2025"],
+    tags: ["Seed Investment", "2026"],
     isBlocked: true,
   },
   {
