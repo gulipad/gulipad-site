@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { Globe } from "lucide-react";
+import {
+  SiSpotify,
+  SiApplepodcasts,
+  SiYoutube,
+} from "react-icons/si";
+import type { IconType } from "react-icons";
 import LinkPreviewBadge from "@/components/LinkPreviewBadge";
 
 interface InterestsPanelProps {
@@ -39,6 +46,30 @@ interface EarlyAdopter {
   description: string;
   isBlocked?: boolean;
 }
+
+interface PodcastPlatform {
+  name: string;
+  url: string;
+}
+
+interface Podcast {
+  title: string;
+  year: string;
+  language: string;
+  platforms: PodcastPlatform[];
+}
+
+const PLATFORM_ICONS: Record<string, { Icon: IconType; color: string }> = {
+  spotify: { Icon: SiSpotify, color: "text-[#1DB954]" },
+  "apple podcasts": { Icon: SiApplepodcasts, color: "text-[#B150E2]" },
+  youtube: { Icon: SiYoutube, color: "text-[#FF0000]" },
+};
+
+const getPlatformVisual = (name: string) =>
+  PLATFORM_ICONS[name.toLowerCase()] ?? {
+    Icon: Globe as unknown as IconType,
+    color: "text-gray-400",
+  };
 
 // Other potential sections to add:
 // - Tools I use: Development environment, productivity apps, hardware setup
@@ -297,6 +328,194 @@ const earlyAdopters: EarlyAdopter[] = [
     description:
       "Joined pretty early on before the vibe-coding trend; pushed my tech team on it.",
     isBlocked: true,
+  },
+];
+
+const podcasts: Podcast[] = [
+  {
+    title: "Kapital",
+    year: "2026",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "Spotify",
+        url: "https://open.spotify.com/episode/78ecgfgVSCzopGBIDzBgTF",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/ve/podcast/k211-guli-moreno-no-sabes-lo-que-no-sabes/id1590189644?i=1000760647057",
+      },
+      {
+        name: "Show notes",
+        url: "https://joantubau.substack.com/p/k211-guli-moreno-no-sabes-lo-que",
+      },
+    ],
+  },
+  {
+    title: "Investing in Spain",
+    year: "2025",
+    language: "English",
+    platforms: [
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/de/podcast/guli-moreno-capchase-the-exponential-fellowship/id1821501519?i=1000713639586",
+      },
+      {
+        name: "Spotify",
+        url: "https://open.spotify.com/episode/1dYOr8Zqphc4vrV8Rhduzc",
+      },
+    ],
+  },
+  {
+    title: "Startup Riders",
+    year: "2025",
+    language: "English",
+    platforms: [
+      {
+        name: "Website",
+        url: "https://www.startupriders.com/p/the-2b-saas-playbook-ignacio-guli",
+      },
+      {
+        name: "Spotify",
+        url: "https://open.spotify.com/episode/38f50FYMDBXsW3zLUuLwA3",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/us/podcast/the-%242b-saas-playbook-ignacio-guli-moreno-co-founder/id1819529106?i=1000726190547",
+      },
+    ],
+  },
+  {
+    title: "The Product Channel",
+    year: "2024",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "YouTube",
+        url: "https://www.youtube.com/watch?v=tIl0g4hadk8",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/us/podcast/montar-un-negocio-desde-usa-y-levantar-100m-con/id1720629574?i=1000643633829",
+      },
+    ],
+  },
+  {
+    title: "Cloud Do You Do?",
+    year: "2024",
+    language: "English",
+    platforms: [
+      {
+        name: "Spotify",
+        url: "https://open.spotify.com/episode/0bfMWrVCfUvH09XZTDNens",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/us/podcast/capchases-innovative-approach-to-financing-saas-startups/id1521216293?i=1000657392321",
+      },
+      {
+        name: "Website",
+        url: "https://www.revolgy.com/insights/podcast/cloud-do-you-do-capchase",
+      },
+    ],
+  },
+  {
+    title: "Emocional",
+    year: "2023",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "Spotify",
+        url: "https://open.spotify.com/episode/2MTaHFakXl31m3jACZC5uW",
+      },
+    ],
+  },
+  {
+    title: "Product Hackers",
+    year: "2022",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "Website",
+        url: "https://producthackers.com/es/podcast/capchase-ignacio-moreno/",
+      },
+      {
+        name: "YouTube",
+        url: "https://www.youtube.com/watch?v=_OODkvVm0jg",
+      },
+      {
+        name: "Spotify",
+        url: "https://open.spotify.com/episode/6E1VvQycuULUruYClYF006",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/us/podcast/financiando-el-crecimiento-de-los-saas-con-guli/id1236733939?i=1000599673089",
+      },
+    ],
+  },
+  {
+    title: "Organiza Tu Proyecto",
+    year: "2022",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "Website",
+        url: "https://organizatuproyecto.com/podcasts/7-como-se-organiza-ignacio-guli-moreno/",
+      },
+      {
+        name: "YouTube",
+        url: "https://www.youtube.com/watch?v=qI5KqhTz3is",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/us/podcast/7-c%C3%B3mo-se-organiza-ignacio-guli-moreno/id1613485939?i=1000579653765",
+      },
+    ],
+  },
+  {
+    title: "Podcast de Itnig",
+    year: "2021",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "YouTube",
+        url: "https://www.youtube.com/watch?v=zaewyD9dbLU",
+      },
+      {
+        name: "Spotify",
+        url: "https://open.spotify.com/episode/6tpT5EbPrf3cexp0o4r1ad",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/es/podcast/capchase-levantar-190m€-en-1-año-para-financiar-el-saas/id1154542684?i=1000526233081",
+      },
+    ],
+  },
+  {
+    title: "PodKast de K Fund",
+    year: "2021",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "Website",
+        url: "https://www.kfund.vc/post/podkast-134-la-historia-de-capchase-financiacion-no-dilutiva-para-saas-y-mas-de-190m-levantados-en-menos-de-un-ano",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/us/podcast/la-historia-de-capchase-financiaci%C3%B3n-no-dilutiva-y/id1189514886?i=1000526008076",
+      },
+    ],
+  },
+  {
+    title: "Nación Innovación",
+    year: "2020",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "YouTube",
+        url: "https://www.youtube.com/watch?v=K6JG7KltN0s",
+      },
+    ],
   },
 ];
 
@@ -580,6 +799,63 @@ const InterestsPanel: React.FC<InterestsPanelProps> = ({
                 </div>
               </div>
             </div>
+
+            {/* Podcasts Section */}
+            {podcasts.length > 0 && (
+              <div>
+                <h2 className="text-3xl font-bold mb-4">Podcasts 🎙️</h2>
+                <hr className="border-gray-700 my-4" />
+                <p className="mb-4">
+                  Podcasts I've been on, in different languages.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {podcasts.map((podcast, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6 flex flex-col"
+                    >
+                      <h3 className="text-xl font-semibold">{podcast.title}</h3>
+                      <div className="flex gap-2 mt-3 items-center">
+                        <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
+                          {podcast.year}
+                        </span>
+                        <span
+                          className="px-2 py-1 bg-gray-700/50 rounded-full text-xs leading-none"
+                          title={podcast.language}
+                          aria-label={podcast.language}
+                        >
+                          {podcast.language === "Spanish"
+                            ? "🇪🇸"
+                            : podcast.language === "English"
+                            ? "🇺🇸"
+                            : podcast.language}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {podcast.platforms.map((platform, pIndex) => {
+                          const { Icon, color } = getPlatformVisual(
+                            platform.name
+                          );
+                          return (
+                            <a
+                              key={pIndex}
+                              href={platform.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title={platform.name}
+                              aria-label={platform.name}
+                              className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gray-700/50 hover:bg-gray-600/70 transition-colors"
+                            >
+                              <Icon className={`w-4 h-4 ${color}`} />
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* People Section */}
             <div>
