@@ -1,0 +1,33 @@
+import type { MetadataRoute } from "next";
+
+const SITE_URL = "https://www.gulipad.com";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date();
+  return [
+    {
+      url: `${SITE_URL}/`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 1,
+    },
+    {
+      url: `${SITE_URL}/about.md`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/llms.txt`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${SITE_URL}/api/bio`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+  ];
+}

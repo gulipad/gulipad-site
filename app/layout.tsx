@@ -12,10 +12,71 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://www.gulipad.com";
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${SITE_URL}/#guli`,
+  name: "Ignacio Moreno Pubul",
+  alternateName: ["Guli", "Guli Moreno", "Ignacio Guli Moreno"],
+  givenName: "Ignacio",
+  familyName: "Moreno Pubul",
+  description:
+    "Co-founder at Capchase, scout at a16z, and founder of the Exponential Fellowship. Spanish product builder based in Madrid.",
+  jobTitle: "Co-founder",
+  worksFor: {
+    "@type": "Organization",
+    name: "Capchase",
+    url: "https://www.capchase.com/",
+  },
+  birthDate: "1994-03-22",
+  birthPlace: {
+    "@type": "Place",
+    name: "Ferrol, Spain",
+  },
+  homeLocation: {
+    "@type": "Place",
+    name: "Madrid, Spain",
+  },
+  nationality: {
+    "@type": "Country",
+    name: "Spain",
+  },
+  url: SITE_URL,
+  image: `${SITE_URL}/og-image.png`,
+  knowsAbout: [
+    "Product management",
+    "Fintech",
+    "SaaS financing",
+    "Revenue-based financing",
+    "Startup operations",
+    "Software engineering",
+    "Angel investing",
+    "Aerospace engineering",
+  ],
+  knowsLanguage: ["Spanish", "English"],
+  sameAs: [
+    "https://github.com/gulipad",
+    "https://x.com/GuliMoreno",
+    "https://www.linkedin.com/in/gulimoreno/",
+    "https://www.producthunt.com/@gulipad",
+    "https://gulipad.notion.site/",
+    "https://www.capchase.com/",
+    "https://www.goexponential.org/",
+  ],
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://gulipad.vercel.app/"),
+  metadataBase: new URL(`${SITE_URL}/`),
   title: "Hi, this is Guli",
   description: "Gulipad's home page for you to explore.",
+  alternates: {
+    canonical: "/",
+    types: {
+      "text/markdown": "/about.md",
+    },
+  },
   // Add OpenGraph metadata
   openGraph: {
     title: "Hi, this is Guli",
@@ -53,6 +114,10 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

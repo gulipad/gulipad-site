@@ -1,0 +1,28 @@
+# Ignacio "Guli" Moreno Pubul
+
+> Co-founder at Capchase (NY-based fintech, ~$1.2B deployed to SaaS startups), scout at a16z, and founder of the Exponential Fellowship. Spanish product builder based in Madrid. Also known as "Guli" — the name everyone uses.
+
+## About
+
+- [About Guli](https://www.gulipad.com/about.md): Full biography — background, values, work philosophy, communication style, and hobbies
+- [Structured bio (JSON)](https://www.gulipad.com/api/bio): Machine-readable bio following a schema.org Person shape
+
+## Companies & projects
+
+- [Capchase](https://www.capchase.com/): NY-based fintech, co-founded 2020. Revenue-based financing for SaaS. ~$1.2B deployed, ~100 team members
+- [Exponential Fellowship](https://www.goexponential.org/): Non-profit sending young Spanish engineers to top US startups. Co-founded 2024
+- [Ateneo](https://ateneo.goexponential.org/): Private forum for exceptional Spanish founders
+- [GitHub (gulipad)](https://github.com/gulipad): Open-source projects including "A Good Date Picker"
+
+## Profiles
+
+- [LinkedIn](https://www.linkedin.com/in/gulimoreno/)
+- [X / Twitter (@GuliMoreno)](https://x.com/GuliMoreno)
+- [GitHub (gulipad)](https://github.com/gulipad)
+- [ProductHunt (@gulipad)](https://www.producthunt.com/@gulipad)
+- [Notion workspace](https://gulipad.notion.site/)
+
+## Optional
+
+- [Guli's handbook on Notion — A Story on Culture](https://gulipad.notion.site/A-Story-on-Culture-09a27f6fb132481684cd69d8596cd56f): Essay on company culture
+- [Exponential Fellowship Manifesto](https://www.goexponential.org/manifesto): Thesis on accelerating Spanish tech via excellent people

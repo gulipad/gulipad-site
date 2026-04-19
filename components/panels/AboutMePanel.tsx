@@ -151,9 +151,8 @@ const AboutMePanel: React.FC<AboutMePanelProps> = ({
               <ul className="list-disc pl-5 text-lg">
                 <li>
                   <em>Everyone</em> calls me Guli – despite my real name being
-                  Ignacio. I've never heard my mom call me by my real name, and
-                  my work email is usually <em>guli@company.com</em>. That's how
-                  deeply ingrained my nickname is.
+                  Ignacio. I've never heard my mom call me by my real name.
+                  That's how deeply ingrained my nickname is.
                 </li>
                 <li>
                   Born March 22nd, 1994. Based in Madrid (with frequent travels
