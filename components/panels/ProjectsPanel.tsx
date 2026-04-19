@@ -331,7 +331,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                                 We have{" "}
                                 <LinkPreviewBadge
                                   link="https://www.goexponential.org/directory/fellows"
-                                  display="8 Fellows"
+                                  display="12 Fellows"
                                 />{" "}
                                 in NY and SF, working for some of the most
                                 exciting YC and a16z companies out there.
