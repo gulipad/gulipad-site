@@ -166,6 +166,22 @@ const articles: Article[] = [
 
 const investments: Investment[] = [
   {
+    title: "Sperid Labs",
+    subtitle:
+      "Sperid Labs is building world models. Backed by Base10 and Pear VC.",
+    link: "https://speridlabs.com/",
+    tags: ["Seed Investment", "2026"],
+    isBlocked: true,
+  },
+  {
+    title: "Arc Risk",
+    subtitle:
+      "Arc Risk is building an engine to price AI insurance.",
+    link: "https://arcrisk.ai/",
+    tags: ["Seed Investment", "2026"],
+    isBlocked: true,
+  },
+  {
     title: "Causa Prima",
     subtitle:
       "Causa Prima is building the agentic rails for XXIst century AP and AR.",

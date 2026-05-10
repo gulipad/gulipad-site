@@ -38,7 +38,7 @@ Actively investing in founders with Spanish roots.
 
 ## Angel Investments
 
-Active pre-seed and seed positions in: Causa Prima, Mito, InfiniteWatch, Quiver (StarVector), Zinco, throxy (YC X25), Reveni, Rebolt (YC W25), BlueWalker Capital, Traza, Capably. LP in Project Europe (20VC).
+Active pre-seed and seed positions in: Sperid Labs, Arc Risk, Causa Prima, Mito, InfiniteWatch, Quiver (StarVector), Zinco, throxy (YC X25), Reveni, Rebolt (YC W25), BlueWalker Capital, Traza, Capably. LP in Project Europe (20VC).
 
 ## Projects
 
