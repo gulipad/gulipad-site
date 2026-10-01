@@ -5,6 +5,7 @@ type IntroBoxProps = {
   text: string;
   speed?: number; // ms per character
   pauseAfter?: { [char: string]: number };
+  completeDelay?: number; // ms to hold the full text before onComplete
   onComplete?: () => void;
 };
 
@@ -12,6 +13,7 @@ export default function IntroBox({
   text,
   speed = 100,
   pauseAfter = { ",": 500 },
+  completeDelay = 500,
   onComplete,
 }: IntroBoxProps) {
   const [displayedText, setDisplayedText] = useState("");
@@ -23,8 +25,9 @@ export default function IntroBox({
     function typeNext() {
       if (index < text.length) {
         const nextChar = text[index];
-        setDisplayedText((prev) => prev + nextChar);
         index++;
+        // Slice rather than append so a re-run effect can't duplicate chars.
+        setDisplayedText(text.slice(0, index));
 
         let delay = speed;
         if (pauseAfter[nextChar]) {
@@ -35,13 +38,13 @@ export default function IntroBox({
       } else {
         timeoutId = setTimeout(() => {
           onComplete?.();
-        }, 500);
+        }, completeDelay);
       }
     }
 
     typeNext();
     return () => clearTimeout(timeoutId);
-  }, [text, speed, pauseAfter, onComplete]);
+  }, [text, speed, pauseAfter, completeDelay, onComplete]);
 
   return <div className="text-white text-xl">{displayedText}</div>;
 }

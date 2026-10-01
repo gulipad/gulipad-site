@@ -18,7 +18,7 @@
 
 Co-founded in 2020. New York–based fintech providing capital and sales-acceleration tools to SaaS startups. Key milestones:
 
-- Over **$1.2B of capital deployed** through Capchase Grow — thousands of years of combined runway extended for thousands of companies.
+- Around **$2B of capital lent** — thousands of years of combined runway extended for thousands of companies.
 - Over **$80M processed** in SaaS deals via Capchase Pay.
 - Around **100 employees** across 10 countries.
 
@@ -26,7 +26,11 @@ Guli works on the Product team at Capchase.
 
 ### Exponential Fellowship (Co-founder)
 
-Non-profit launched in 2024. Sends bright young Spanish engineers to top US startups in NY and SF. Based on the thesis that a small number of excellent people can shift the trajectory of a country. Twelve Fellows placed so far at YC and a16z companies.
+Non-profit launched in 2024. Sends bright young Spanish engineers to top US startups in NY and SF. Based on the thesis that a small number of excellent people can shift the trajectory of a country. 16+ Fellows placed so far in the US at YC and a16z companies.
+
+### HackSpain
+
+Hackathon for Spain's most talented young builders, run together with the Exponential Fellowship. The 2026 edition: 60 teams, 250 participants, 3 days and €10K in prizes. Sponsored by top Spanish startups (+€350M raised between them), with mentors from leading Silicon Valley companies. https://www.goexponential.org/hackspain
 
 ### Ateneo
 
@@ -130,9 +134,14 @@ Long-running public projects include:
 - Picky eater — doesn't eat seafood.
 - YouTube for learning: Veritasium, Vsauce, 3Blue1Brown, Lemniscata.
 
+## Writings
+
+- [A Story on Culture](https://www.gulipad.com/writings/a-story-on-culture) (2021, English) — How Capchase's culture and values evolved during hypergrowth.
+- [The Exponential Manifesto](https://www.gulipad.com/writings/exponential-manifesto) (2023, English, with the Exponential team) — The thesis behind the Exponential Fellowship.
+
 ## Podcasts He's Been On
 
-2026: Kapital (ES). 2025: Investing in Spain (EN), Startup Riders (EN). 2024: The Product Channel (ES), Cloud Do You Do? (EN). 2023: Emocional (ES). 2022: Product Hackers (ES), Organiza Tu Proyecto (ES). 2021: Podcast de Itnig (ES), PodKast de K Fund (ES). 2020: Nación Innovación (ES).
+2026: SeedRocket (ES), Kapital (ES). 2025: Investing in Spain (EN), Startup Riders (EN). 2024: The Product Channel (ES), Cloud Do You Do? (EN). 2023: Emocional (ES). 2022: Product Hackers (ES), Organiza Tu Proyecto (ES). 2021: Podcast de Itnig (ES), PodKast de K Fund (ES). 2020: Nación Innovación (ES).
 
 ## Contact & Links
 

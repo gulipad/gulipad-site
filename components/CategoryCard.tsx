@@ -15,6 +15,7 @@ type CategoryCardProps = {
   distance?: number; // in vh
   gridPosition?: { row: number; col: number; section?: string }; // For mobile grid layout
   isVisible?: boolean;
+  paused?: boolean; // hold still (no bobbing) while covered by a panel
   delay?: number; // in ms
 
   primaryColor?: string; // "255,0,150"  (no parentheses, no alpha)
@@ -30,6 +31,7 @@ export default function CategoryCard({
   distance = 0,
   gridPosition,
   isVisible = false,
+  paused = false,
   delay = 0,
   primaryColor = "255,0,150",
   secondaryColor = "0,255,255",
@@ -123,7 +125,9 @@ export default function CategoryCard({
       initial={{ scale: 0, opacity: 0, rotate: 0 }}
       // Animate in if visible, bob up/down & rotate
       animate={
-        isVisible
+        isVisible && paused
+          ? { scale: 1, opacity: 1, y: phase1, rotate: initialRotation }
+          : isVisible
           ? {
               scale: 1, // baseline scale from 0 → 1
               opacity: 1,

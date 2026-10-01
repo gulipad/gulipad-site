@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import PanelShell, { type PanelProps } from "@/components/panels/PanelShell";
 import { Globe } from "lucide-react";
 import {
   SiSpotify,
@@ -8,14 +7,6 @@ import {
 } from "react-icons/si";
 import type { IconType } from "react-icons";
 import LinkPreviewBadge from "@/components/LinkPreviewBadge";
-
-interface InterestsPanelProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onNavigateNext?: () => void;
-  onNavigatePrevious?: () => void;
-  isNavigating?: boolean;
-}
 
 interface Investment {
   title: string;
@@ -349,6 +340,29 @@ const earlyAdopters: EarlyAdopter[] = [
 
 const podcasts: Podcast[] = [
   {
+    title: "SeedRocket",
+    year: "2026",
+    language: "Spanish",
+    platforms: [
+      {
+        name: "Spotify",
+        url: "https://open.spotify.com/episode/1awOACCuL6fHJw0gQa8tat",
+      },
+      {
+        name: "Apple Podcasts",
+        url: "https://podcasts.apple.com/us/podcast/tiene-espa%C3%B1a-talento-para-crear-el-pr%C3%B3ximo-silicon/id1464657775?i=1000777897495",
+      },
+      {
+        name: "iVoox",
+        url: "https://www.ivoox.com/tiene-espana-talento-para-crear-proximo-silicon-audios-mp3_rf_177750346_1.html",
+      },
+      {
+        name: "YouTube",
+        url: "https://www.youtube.com/watch?v=yFuvCNtMEmw",
+      },
+    ],
+  },
+  {
     title: "Kapital",
     year: "2026",
     language: "Spanish",
@@ -538,7 +552,7 @@ const podcasts: Podcast[] = [
 const people: Person[] = [
   {
     name: "Paul Graham",
-    link: "http://www.paulgraham.com/",
+    link: "https://paulgraham.com/",
     description:
       "Y Combinator co-founder and essayist on startups, programming, and innovation",
   },
@@ -576,340 +590,222 @@ const people: Person[] = [
   },
 ];
 
-const InterestsPanel: React.FC<InterestsPanelProps> = ({
-  isVisible,
-  onClose,
-  onNavigateNext,
-  onNavigatePrevious,
-  isNavigating = false,
-}) => {
-  const [mounted, setMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isMac, setIsMac] = useState(false);
+const LAST_UPDATED = "2026-10-01";
 
-  useEffect(() => {
-    setMounted(true);
-    setIsMac(navigator.platform.toUpperCase().indexOf("MAC") >= 0);
-    setIsMobile(window.innerWidth < 768);
+const InterestsPanel: React.FC<PanelProps> = (props) => (
+  <PanelShell {...props} title="Random Stuff" lastUpdated={LAST_UPDATED}>
+    {/* Introduction Section */}
+    <div>
+      <div className="bg-gray-800 rounded-lg p-6 my-4">
+        💡 Waddup! This is a bit of a random fix of stuff that doesn't
+        really fit any category. You'll find random links I like,
+        podcasts, and my investments. And who knows what else.
+      </div>
+    </div>
 
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isVisible) {
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isVisible, onClose]);
-
-  const modifierKey = isMac ? "⌘" : "Ctrl";
-
-  return (
-    <motion.div
-      className="fixed inset-0 flex items-center justify-center z-50"
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: isVisible ? 1 : 0,
-        display: isVisible ? "flex" : "none",
-      }}
-      transition={{ duration: 0.1 }}
-    >
-      <motion.div
-        className="relative w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] bg-black/50 backdrop-blur-xl 
-                   bg-gradient-to-br from-black/60 to-gray-900/60 text-white rounded-xl 
-                   border border-white/20 shadow-2xl overflow-y-auto z-10 isolate m-4"
-        initial={{
-          opacity: 0,
-          scale: 0.95,
-        }}
-        animate={{
-          opacity: isVisible ? 1 : 0,
-          scale: isVisible ? 1 : 0.95,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 400,
-          damping: 25,
-          duration: isNavigating ? 0 : 0.1,
-        }}
-      >
-        {/* Header */}
-        <div className="sticky top-0 mx-4 pt-0 z-20">
+    {/* Investments Section */}
+    <div>
+      <h2 className="text-3xl font-bold mb-4">Investments 💰</h2>
+      <hr className="border-gray-700 my-4" />
+      <p className="mb-4">
+        I don't hold a lot of cash. I angel invest in some startups, and
+        keep a diversified portfolio.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {investments.map((investment, index) => (
           <div
-            className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/85 via-black/50 to-transparent backdrop-blur-2xl"
-            style={{
-              maskImage:
-                "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 5%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%)",
-            }}
-          />
-          <div className="relative flex justify-between items-center pt-4">
-            {/* Navigation buttons */}
-            <div className="flex gap-2">
-              <button
-                onClick={onNavigatePrevious}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-xl
-                           hover:bg-white/40 border border-white/10 transition-colors text-sm font-mono"
-                title={`Previous section (${modifierKey}I)`}
-              >
-                <span className="text-white/70">‹</span>
-                {mounted && !isMobile && (
-                  <span className="text-white/70">{modifierKey}I</span>
-                )}
-              </button>
-              <button
-                onClick={onNavigateNext}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-xl
-                           hover:bg-white/40 border border-white/10 transition-colors text-sm font-mono"
-                title={`Next section (${modifierKey}O)`}
-              >
-                {mounted && !isMobile && (
-                  <span className="text-white/70">{modifierKey}O</span>
-                )}
-                <span className="text-white/70">›</span>
-              </button>
-            </div>
-
-            {/* Close button */}
-            <button
-              onClick={onClose}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-xl
-                         hover:bg-white/40 border border-white/10 transition-colors text-sm font-mono"
-            >
-              <span className="text-white/70">esc</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Content */}
-        <h1 className="text-6xl font-bold text-center py-8 mt-4">
-          Random Stuff
-        </h1>
-        <div className="px-6 py-8 sm:px-8">
-          <div className="max-w-4xl mx-auto space-y-8">
-            {/* Introduction Section */}
-            <div>
-              <div className="bg-gray-800 rounded-lg p-6 my-4">
-                💡 Waddup! This is a bit of a random fix of stuff that doesn't
-                really fit any category. You'll find random links I like,
-                writings, and my investments. And who knows what else.
-              </div>
-            </div>
-
-            {/* Investments Section */}
-            <div>
-              <h2 className="text-3xl font-bold mb-4">Investments 💰</h2>
-              <hr className="border-gray-700 my-4" />
-              <p className="mb-4">
-                I don't hold a lot of cash. I angel invest in some startups, and
-                keep a diversified portfolio.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {investments.map((investment, index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="text-xl font-semibold">
-                          {investment.title}
-                        </h3>
-                        <p className="text-gray-400 text-sm mt-1">
-                          {investment.subtitle}
-                        </p>
-                      </div>
-                      <LinkPreviewBadge
-                        link={investment.link}
-                        display="Visit"
-                        isBlocked={investment.isBlocked}
-                      />
-                    </div>
-                    <div className="flex gap-2 mt-3">
-                      {investment.tags.map((tag, tagIndex) => (
-                        <span
-                          key={tagIndex}
-                          className="px-2 py-1 bg-gray-700/50 rounded-full text-xs"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Articles */}
-            <div>
-              <h2 className="text-3xl font-bold mb-4">Startup Articles 🚀</h2>
-              <hr className="border-gray-700 my-4" />
-              <p className="mb-4">
-                Random reads and concepts I've found interesting for startups.
-              </p>
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
-                <ul className="space-y-4">
-                  {articles.map((article, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <LinkPreviewBadge
-                        link={article.link}
-                        display={article.title}
-                        isBlocked={article.isBlocked}
-                      />
-                      <span className="text-gray-400">→</span>
-                      <span className="text-sm text-gray-300">
-                        {article.description}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Early Adopter Section */}
-            <div>
-              <h2 className="text-3xl font-bold mb-4">Early Adopter 🚀</h2>
-              <hr className="border-gray-700 my-4" />
-              <p className="mb-4">
-                Tools and platforms I jumped on early and have been using since
-                their early days.
-              </p>
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {earlyAdopters.map((adopter, index) => (
-                    <div
-                      key={index}
-                      className="bg-gray-700/30 backdrop-blur-sm rounded-lg border border-gray-600/50 p-4 hover:bg-gray-700/50 transition-colors"
-                    >
-                      <div className="flex flex-col h-full">
-                        <div className="flex justify-between items-start mb-2">
-                          <h3 className="text-lg font-semibold text-white">
-                            {adopter.name}
-                          </h3>
-                          {adopter.link && (
-                            <LinkPreviewBadge
-                              link={adopter.link}
-                              display="↗"
-                              isBlocked={adopter.isBlocked}
-                            />
-                          )}
-                        </div>
-                        <p className="text-sm text-gray-300 mb-3 flex-grow">
-                          {adopter.description}
-                        </p>
-                        <div className="mt-auto">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                            Since {adopter.dateJoined}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Podcasts Section */}
-            {podcasts.length > 0 && (
+            key={index}
+            className="bg-gray-800/50 rounded-lg border border-gray-700 p-6"
+          >
+            <div className="flex justify-between items-start">
               <div>
-                <h2 className="text-3xl font-bold mb-4">Podcasts 🎙️</h2>
-                <hr className="border-gray-700 my-4" />
-                <p className="mb-4">
-                  Podcasts I've been on, in different languages.
+                <h3 className="text-xl font-semibold">
+                  {investment.title}
+                </h3>
+                <p className="text-gray-400 text-sm mt-1">
+                  {investment.subtitle}
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {podcasts.map((podcast, index) => (
-                    <div
-                      key={index}
-                      className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6 flex flex-col"
-                    >
-                      <h3 className="text-xl font-semibold">{podcast.title}</h3>
-                      <div className="flex gap-2 mt-3 items-center">
-                        <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
-                          {podcast.year}
-                        </span>
-                        <span
-                          className="px-2 py-1 bg-gray-700/50 rounded-full text-xs leading-none"
-                          title={podcast.language}
-                          aria-label={podcast.language}
-                        >
-                          {podcast.language === "Spanish"
-                            ? "🇪🇸"
-                            : podcast.language === "English"
-                            ? "🇺🇸"
-                            : podcast.language}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        {podcast.platforms.map((platform, pIndex) => {
-                          const { Icon, color } = getPlatformVisual(
-                            platform.name
-                          );
-                          return (
-                            <a
-                              key={pIndex}
-                              href={platform.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              title={platform.name}
-                              aria-label={platform.name}
-                              className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gray-700/50 hover:bg-gray-600/70 transition-colors"
-                            >
-                              <Icon className={`w-4 h-4 ${color}`} />
-                            </a>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
-            )}
+              <LinkPreviewBadge
+                link={investment.link}
+                display="Visit"
+                isBlocked={investment.isBlocked}
+              />
+            </div>
+            <div className="flex gap-2 mt-3">
+              {investment.tags.map((tag, tagIndex) => (
+                <span
+                  key={tagIndex}
+                  className="px-2 py-1 bg-gray-700/50 rounded-full text-xs"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
 
-            {/* People Section */}
-            <div>
-              <h2 className="text-3xl font-bold mb-4">Interesting People 🧠</h2>
-              <hr className="border-gray-700 my-4" />
-              <p className="mb-4">
-                Thinkers, founders, and innovators whose writings I follow and
-                admire. You can also see who I follow on{" "}
-                <LinkPreviewBadge
-                  link="https://x.com/gulimoreno/following"
-                  display="X/Twitter"
-                  isBlocked={true}
-                />
-                .
-              </p>
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-6">
-                <div className="space-y-4">
-                  {people.map((person, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <LinkPreviewBadge
-                        link={person.link}
-                        display={person.name}
-                        isBlocked={person.isBlocked}
-                      />
-                      <span className="text-gray-400">→</span>
-                      <span className="text-sm text-gray-300">
-                        {person.description}
-                      </span>
-                    </div>
-                  ))}
+    {/* Articles */}
+    <div>
+      <h2 className="text-3xl font-bold mb-4">Startup Articles 🚀</h2>
+      <hr className="border-gray-700 my-4" />
+      <p className="mb-4">
+        Random reads and concepts I've found interesting for startups.
+      </p>
+      <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6">
+        <ul className="space-y-4">
+          {articles.map((article, index) => (
+            <li key={index} className="flex items-center gap-2">
+              <LinkPreviewBadge
+                link={article.link}
+                display={article.title}
+                isBlocked={article.isBlocked}
+              />
+              <span className="text-gray-400">→</span>
+              <span className="text-sm text-gray-300">
+                {article.description}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    {/* Early Adopter Section */}
+    <div>
+      <h2 className="text-3xl font-bold mb-4">Early Adopter 🚀</h2>
+      <hr className="border-gray-700 my-4" />
+      <p className="mb-4">
+        Tools and platforms I jumped on early and have been using since
+        their early days.
+      </p>
+      <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {earlyAdopters.map((adopter, index) => (
+            <div
+              key={index}
+              className="bg-gray-700/30 rounded-lg border border-gray-600/50 p-4 hover:bg-gray-700/50 transition-colors"
+            >
+              <div className="flex flex-col h-full">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-lg font-semibold text-white">
+                    {adopter.name}
+                  </h3>
+                  {adopter.link && (
+                    <LinkPreviewBadge
+                      link={adopter.link}
+                      display="↗"
+                      isBlocked={adopter.isBlocked}
+                    />
+                  )}
+                </div>
+                <p className="text-sm text-gray-300 mb-3 flex-grow">
+                  {adopter.description}
+                </p>
+                <div className="mt-auto">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                    Since {adopter.dateJoined}
+                  </span>
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      </motion.div>
-    </motion.div>
-  );
-};
+      </div>
+    </div>
+
+    {/* Podcasts Section */}
+    {podcasts.length > 0 && (
+      <div>
+        <h2 className="text-3xl font-bold mb-4">Podcasts 🎙️</h2>
+        <hr className="border-gray-700 my-4" />
+        <p className="mb-4">
+          Podcasts I've been on, in different languages.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {podcasts.map((podcast, index) => (
+            <div
+              key={index}
+              className="bg-gray-800/50 rounded-lg border border-gray-700 p-6 flex flex-col"
+            >
+              <h3 className="text-xl font-semibold">{podcast.title}</h3>
+              <div className="flex gap-2 mt-3 items-center">
+                <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
+                  {podcast.year}
+                </span>
+                <span
+                  className="px-2 py-1 bg-gray-700/50 rounded-full text-xs leading-none"
+                  title={podcast.language}
+                  aria-label={podcast.language}
+                >
+                  {podcast.language === "Spanish"
+                    ? "🇪🇸"
+                    : podcast.language === "English"
+                    ? "🇺🇸"
+                    : podcast.language}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-4">
+                {podcast.platforms.map((platform, pIndex) => {
+                  const { Icon, color } = getPlatformVisual(
+                    platform.name
+                  );
+                  return (
+                    <a
+                      key={pIndex}
+                      href={platform.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={platform.name}
+                      aria-label={platform.name}
+                      className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gray-700/50 hover:bg-gray-600/70 transition-colors"
+                    >
+                      <Icon className={`w-4 h-4 ${color}`} />
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* People Section */}
+    <div>
+      <h2 className="text-3xl font-bold mb-4">Interesting People 🧠</h2>
+      <hr className="border-gray-700 my-4" />
+      <p className="mb-4">
+        Thinkers, founders, and innovators whose writings I follow and
+        admire. You can also see who I follow on{" "}
+        <LinkPreviewBadge
+          link="https://x.com/gulimoreno/following"
+          display="X/Twitter"
+          isBlocked={true}
+        />
+        .
+      </p>
+      <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-6">
+        <div className="space-y-4">
+          {people.map((person, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <LinkPreviewBadge
+                link={person.link}
+                display={person.name}
+                isBlocked={person.isBlocked}
+              />
+              <span className="text-gray-400">→</span>
+              <span className="text-sm text-gray-300">
+                {person.description}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </PanelShell>
+);
 
 export default InterestsPanel;
