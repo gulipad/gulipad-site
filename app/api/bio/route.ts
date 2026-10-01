@@ -16,7 +16,7 @@ const bio = {
     name: "Capchase",
     url: "https://www.capchase.com/",
     description:
-      "NY-based fintech providing capital and sales acceleration to SaaS startups. ~$1.2B deployed, ~100 employees across 10 countries.",
+      "NY-based fintech providing capital and sales acceleration to SaaS startups. ~$2B lent, ~100 employees across 10 countries.",
   },
   affiliation: [
     {

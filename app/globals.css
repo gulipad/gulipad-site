@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -136,4 +137,10 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Writings: the source text already carries its own quotation marks. */
+.writing-prose blockquote p:first-of-type::before,
+.writing-prose blockquote p:last-of-type::after {
+  content: none;
 }

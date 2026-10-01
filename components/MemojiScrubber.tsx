@@ -7,27 +7,38 @@ import Spinner from "@/components/Spinner";
 type MemojiScrubberProps = {
   onLoaded?: () => void;
   displayMemoji: boolean;
+  // Stops the animation loop, e.g. while a panel covers the memoji.
+  paused?: boolean;
 };
 
 const TOTAL_FRAMES = 168;
 const FRAME_PATH = "/memoji-frames/frame-";
+// Default frame (zero-indexed 130 corresponds to frame 131)
+const DEFAULT_FRAME = 130;
 
 export default function MemojiScrubber({
   onLoaded,
   displayMemoji,
+  paused = false,
 }: MemojiScrubberProps) {
-  // Default frame (zero-indexed 130 corresponds to frame 131)
-  const [currentFrame, setCurrentFrame] = useState(130);
   const [allFramesLoaded, setAllFramesLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
-  const targetFrameRef = useRef(130);
+  // Animation state lives in refs: the spring runs every frame, and routing it
+  // through React state would re-render the component ~60 times per second.
+  const frameRef = useRef(DEFAULT_FRAME);
+  const targetFrameRef = useRef(DEFAULT_FRAME);
   const velocityRef = useRef(0);
+  const drawnRef = useRef<{ canvas: HTMLCanvasElement | null; frame: number }>(
+    { canvas: null, frame: -1 }
+  );
   // Cursor distance from screen center; governs how strongly we pull toward
   // targetFrame. Starts at Infinity so behavior is normal before first move.
   const radiusRef = useRef(Infinity);
   const lastTimeRef = useRef<number | null>(null);
+  const onLoadedRef = useRef(onLoaded);
+  onLoadedRef.current = onLoaded;
 
   // Check for mobile screen size
   useEffect(() => {
@@ -44,48 +55,61 @@ export default function MemojiScrubber({
   // Get responsive canvas size
   const canvasSize = isMobile ? 140 : 220;
 
-  // Preload all images and store them in imagesRef.
+  // Preload all images once and store them in imagesRef.
   useEffect(() => {
+    let cancelled = false;
     const images: HTMLImageElement[] = [];
     const promises = [];
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const padded = String(i).padStart(3, "0");
       const src = `${FRAME_PATH}${padded}.webp`;
       const img = new Image();
-      img.src = src;
-      images.push(img);
+      img.decoding = "async";
       promises.push(
         new Promise<void>((resolve, reject) => {
           img.onload = () => resolve();
           img.onerror = () => reject(new Error(`Failed to load ${src}`));
         })
       );
+      img.src = src;
+      images.push(img);
     }
     Promise.all(promises)
       .then(() => {
+        if (cancelled) return;
         imagesRef.current = images;
         setAllFramesLoaded(true);
-        if (onLoaded) onLoaded();
-        // Draw the initial frame.
-        const canvas = canvasRef.current;
-        if (canvas) {
-          const ctx = canvas.getContext("2d");
-          if (ctx) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(images[130], 0, 0, canvas.width, canvas.height);
-          }
-        }
+        onLoadedRef.current?.();
       })
       .catch((err) => console.error(err));
-  }, [onLoaded, canvasSize]);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Animation loop: critically-damped spring toward targetFrame, with a
-  // deadband near the radial center where atan2 is unstable.
+  // deadband near the radial center where atan2 is unstable. Draws straight
+  // to the canvas, and only when the visible frame actually changes.
   useEffect(() => {
+    if (paused) return;
     const STIFFNESS = 120;
     const DAMPING = 22; // ~2 * sqrt(STIFFNESS), critically damped
     const DEADBAND = 120; // px; full pull kicks in beyond this radius
     const MAX_DT = 1 / 30; // clamp spikes (e.g. backgrounded tab)
+
+    const draw = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const frameIndex = Math.round(frameRef.current) % TOTAL_FRAMES;
+      const drawn = drawnRef.current;
+      if (drawn.canvas === canvas && drawn.frame === frameIndex) return;
+      const img = imagesRef.current[frameIndex];
+      const ctx = canvas.getContext("2d");
+      if (!img || !ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      drawnRef.current = { canvas, frame: frameIndex };
+    };
 
     let animationFrameId: number;
     const animate = (now: number) => {
@@ -93,31 +117,30 @@ export default function MemojiScrubber({
       lastTimeRef.current = now;
       const dt = last == null ? 0 : Math.min((now - last) / 1000, MAX_DT);
 
-      setCurrentFrame((prev) => {
-        let diff = targetFrameRef.current - prev;
-        if (diff > TOTAL_FRAMES / 2) diff -= TOTAL_FRAMES;
-        else if (diff < -TOTAL_FRAMES / 2) diff += TOTAL_FRAMES;
+      const prev = frameRef.current;
+      let diff = targetFrameRef.current - prev;
+      if (diff > TOTAL_FRAMES / 2) diff -= TOTAL_FRAMES;
+      else if (diff < -TOTAL_FRAMES / 2) diff += TOTAL_FRAMES;
 
+      if (Math.abs(diff) < 0.01 && Math.abs(velocityRef.current) < 0.01) {
+        velocityRef.current = 0;
+        frameRef.current = targetFrameRef.current;
+      } else {
         const pullWeight = Math.min(1, radiusRef.current / DEADBAND);
         const accel =
           STIFFNESS * diff * pullWeight - DAMPING * velocityRef.current;
         velocityRef.current += accel * dt;
+        const next = prev + velocityRef.current * dt;
+        frameRef.current = ((next % TOTAL_FRAMES) + TOTAL_FRAMES) % TOTAL_FRAMES;
+      }
 
-        if (Math.abs(diff) < 0.01 && Math.abs(velocityRef.current) < 0.01) {
-          velocityRef.current = 0;
-          return targetFrameRef.current;
-        }
-
-        let next = prev + velocityRef.current * dt;
-        next = ((next % TOTAL_FRAMES) + TOTAL_FRAMES) % TOTAL_FRAMES;
-        return next;
-      });
-
+      draw();
       animationFrameId = requestAnimationFrame(animate);
     };
+    lastTimeRef.current = null;
     animationFrameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrameId);
-  }, []);
+  }, [paused]);
 
   // Update targetFrame based on mouse or touch position.
   useEffect(() => {
@@ -142,34 +165,22 @@ export default function MemojiScrubber({
         updateFrame(e.touches[0].clientX, e.touches[0].clientY);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
 
-  // Redraw the canvas whenever currentFrame updates.
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const frameIndex = Math.round(currentFrame);
-    const img = imagesRef.current[frameIndex];
-    if (img) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
-  }, [currentFrame]);
-
-  // Render: always reserve a 220×220 container.
+  // Render: always reserve a canvasSize×canvasSize container.
   return (
     <div className="relative" style={{ width: canvasSize, height: canvasSize }}>
       {displayMemoji ? (
         allFramesLoaded ? (
           <motion.canvas
+            // Remount on resize so the loop redraws onto the fresh canvas.
+            key={canvasSize}
             ref={canvasRef}
             width={canvasSize}
             height={canvasSize}

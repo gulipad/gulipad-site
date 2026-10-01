@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { getWritings } from "@/lib/writings";
+
 const SITE_URL = "https://www.gulipad.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -29,5 +31,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    ...getWritings().map((writing) => ({
+      url: `${SITE_URL}/writings/${writing.slug}`,
+      lastModified,
+      changeFrequency: "yearly" as const,
+      priority: 0.7,
+    })),
   ];
 }
