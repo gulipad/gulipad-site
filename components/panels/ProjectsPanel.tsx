@@ -1,7 +1,12 @@
+"use client";
+
 import PanelShell, { type PanelProps } from "@/components/panels/PanelShell";
 import LinkPreviewBadge from "@/components/LinkPreviewBadge";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { Play } from "lucide-react";
+import VideoOverlay from "@/components/VideoOverlay";
 import { languageFlag, type WritingMeta } from "@/lib/writings-shared";
 
 interface Project {
@@ -11,6 +16,8 @@ interface Project {
   link: string;
   isBlocked?: boolean;
   imageFit?: "cover" | "contain";
+  /** YouTube video ID; adds a "Watch aftermovie" button to the card. */
+  aftermovie?: string;
   description: React.ReactNode;
 }
 
@@ -87,6 +94,7 @@ const projects: Project[] = [
     imageFit: "contain",
     tags: ["Hackathon", "Exponential", "Spain"],
     link: "https://www.goexponential.org/hackspain",
+    aftermovie: "ZmFc16oY5hY",
     description: (
       <>
         <p className="mb-2">
@@ -241,176 +249,202 @@ const LAST_UPDATED = "2026-10-01";
 const ProjectsPanel: React.FC<PanelProps & { writings: WritingMeta[] }> = ({
   writings,
   ...props
-}) => (
-  <PanelShell {...props} title="I ❤️ to Build" lastUpdated={LAST_UPDATED}>
-    {/* Introduction Section */}
-    <div>
-      <div className="bg-gray-800 rounded-lg p-6 my-4">
-        💡 I'm a Product guy. I see software engineering as a means to
-        an end: to ship useful, impactful, or just plain fun stuff to
-        the World. Feel free to explore some of my projects.
-      </div>
-    </div>
-    <div className="max-w-6xl mx-auto">
-      {/* Active Projects */}
+}) => {
+  const [video, setVideo] = useState<{ id: string; title: string } | null>(null);
+
+  return (
+    <PanelShell {...props} title="I ❤️ to Build" lastUpdated={LAST_UPDATED}>
+      {/* Introduction Section */}
       <div>
-        <h2 className="text-3xl font-bold mb-4">Active Projects 🛠️</h2>
-        <hr className="border-gray-700 my-4" />
-        <p className="text-gray-300 mb-6">
-          These are the active projects that I've built (alone or with
-          others) that I am most proud of. Hope you like them!
-        </p>
+        <div className="bg-gray-800 rounded-lg p-6 my-4">
+          💡 I'm a Product guy. I see software engineering as a means to
+          an end: to ship useful, impactful, or just plain fun stuff to
+          the World. Feel free to explore some of my projects.
+        </div>
+      </div>
+      <div className="max-w-6xl mx-auto">
+        {/* Active Projects */}
+        <div>
+          <h2 className="text-3xl font-bold mb-4">Active Projects 🛠️</h2>
+          <hr className="border-gray-700 my-4" />
+          <p className="text-gray-300 mb-6">
+            These are the active projects that I've built (alone or with
+            others) that I am most proud of. Hope you like them!
+          </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map((project) => (
-            <div
-              key={project.title}
-              className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden"
-            >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {projects.map((project) => (
               <div
-                className={`relative h-48 w-full ${
-                  project.imageFit === "contain" ? "bg-black" : ""
-                }`}
+                key={project.title}
+                className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden"
               >
-                <Image
-                  src={`/${project.image}`}
-                  alt={project.title}
-                  fill
-                  sizes="(min-width: 768px) 448px, 100vw"
-                  className={
-                    project.imageFit === "contain"
-                      ? "object-contain p-10"
-                      : "object-cover"
-                  }
-                />
-              </div>
-
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-bold">{project.title}</h3>
-                  <LinkPreviewBadge
-                    link={project.link}
-                    display="Visit"
-                    isBlocked={project.isBlocked}
+                <div
+                  className={`relative h-48 w-full ${
+                    project.imageFit === "contain" ? "bg-black" : ""
+                  }`}
+                >
+                  <Image
+                    src={`/${project.image}`}
+                    alt={project.title}
+                    fill
+                    sizes="(min-width: 768px) 448px, 100vw"
+                    className={
+                      project.imageFit === "contain"
+                        ? "object-contain p-10"
+                        : "object-cover"
+                    }
                   />
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {project.tags.map((tag) => (
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold">{project.title}</h3>
+                    <LinkPreviewBadge
+                      link={project.link}
+                      display="Visit"
+                      isBlocked={project.isBlocked}
+                    />
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 bg-gray-700/50 rounded-full text-sm text-gray-300"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="text-gray-300 text-sm">
+                    {project.description}
+                  </div>
+
+                  {project.aftermovie && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setVideo({ id: project.aftermovie!, title: `${project.title} aftermovie` })
+                      }
+                      className="group mt-4 inline-flex items-center gap-2 rounded-full border border-gray-600 py-1.5 pl-1.5 pr-3.5 text-sm text-gray-200 transition-colors hover:border-gray-400 hover:bg-gray-700/40 hover:text-white"
+                    >
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-gray-900 transition-transform group-hover:scale-110">
+                        <Play className="h-3 w-3 translate-x-px" fill="currentColor" />
+                      </span>
+                      Watch aftermovie
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Writings Section */}
+          {writings.length > 0 && (
+            <div>
+              <h2 className="text-3xl font-bold mb-4 mt-12">Writings ✍️</h2>
+              <hr className="border-gray-700 my-4" />
+              <p className="text-gray-300 mb-6">
+                Builds of a different kind: things I've written over the years.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {writings.map((writing) => (
+                  <Link
+                    key={writing.slug}
+                    href={`/writings/${writing.slug}`}
+                    className="group bg-gray-800/50 rounded-lg border border-gray-700 p-6 flex flex-col
+                               hover:bg-gray-800/80 hover:border-gray-500 transition-colors"
+                  >
+                    <h3 className="text-xl font-semibold">
+                      {writing.title}
+                      <span className="inline-block ml-1 text-gray-500 transition-transform group-hover:translate-x-1">
+                        →
+                      </span>
+                    </h3>
+                    <p className="text-gray-400 text-sm mt-2 flex-grow">
+                      {writing.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mt-4 items-center">
+                      <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
+                        {writing.date.slice(0, 4)}
+                      </span>
+                      <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
+                        {writing.readingMinutes} min read
+                      </span>
+                      <span
+                        className="px-2 py-1 bg-gray-700/50 rounded-full text-xs leading-none"
+                        title={`Written in ${writing.language}`}
+                        aria-label={`Written in ${writing.language}`}
+                      >
+                        {languageFlag(writing.language)}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Other Projects */}
+          <h2 className="text-3xl font-bold mb-4 mt-12">
+            Other Projects 📦
+          </h2>
+          <hr className="border-gray-700 my-4" />
+          <p className="text-gray-300 mb-6">
+            A collection of side projects and experiments I've worked on
+            over the years.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {otherProjects.map((project, index) => (
+              <div
+                key={index}
+                className="bg-gray-800/50 rounded-lg border border-gray-700 p-6"
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-xl font-semibold">
+                    {project.title}
+                  </h3>
+                  {project.link ? (
+                    <LinkPreviewBadge
+                      link={project.link}
+                      display="Visit"
+                      isBlocked={project.isBlocked}
+                    />
+                  ) : (
+                    <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300">
+                      Deprecated
+                    </span>
+                  )}
+                </div>
+                <p className="text-gray-400 text-sm mb-3">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map((tag, tagIndex) => (
                     <span
-                      key={tag}
-                      className="px-2 py-1 bg-gray-700/50 rounded-full text-sm text-gray-300"
+                      key={tagIndex}
+                      className="px-2 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
-
-                <div className="text-gray-300 text-sm">
-                  {project.description}
-                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Writings Section */}
-        {writings.length > 0 && (
-          <div>
-            <h2 className="text-3xl font-bold mb-4 mt-12">Writings ✍️</h2>
-            <hr className="border-gray-700 my-4" />
-            <p className="text-gray-300 mb-6">
-              Builds of a different kind: things I've written over the years.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {writings.map((writing) => (
-                <Link
-                  key={writing.slug}
-                  href={`/writings/${writing.slug}`}
-                  className="group bg-gray-800/50 rounded-lg border border-gray-700 p-6 flex flex-col
-                             hover:bg-gray-800/80 hover:border-gray-500 transition-colors"
-                >
-                  <h3 className="text-xl font-semibold">
-                    {writing.title}
-                    <span className="inline-block ml-1 text-gray-500 transition-transform group-hover:translate-x-1">
-                      →
-                    </span>
-                  </h3>
-                  <p className="text-gray-400 text-sm mt-2 flex-grow">
-                    {writing.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-4 items-center">
-                    <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
-                      {writing.date.slice(0, 4)}
-                    </span>
-                    <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
-                      {writing.readingMinutes} min read
-                    </span>
-                    <span
-                      className="px-2 py-1 bg-gray-700/50 rounded-full text-xs leading-none"
-                      title={`Written in ${writing.language}`}
-                      aria-label={`Written in ${writing.language}`}
-                    >
-                      {languageFlag(writing.language)}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            ))}
           </div>
-        )}
-
-        {/* Other Projects */}
-        <h2 className="text-3xl font-bold mb-4 mt-12">
-          Other Projects 📦
-        </h2>
-        <hr className="border-gray-700 my-4" />
-        <p className="text-gray-300 mb-6">
-          A collection of side projects and experiments I've worked on
-          over the years.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {otherProjects.map((project, index) => (
-            <div
-              key={index}
-              className="bg-gray-800/50 rounded-lg border border-gray-700 p-6"
-            >
-              <div className="flex justify-between items-start mb-3">
-                <h3 className="text-xl font-semibold">
-                  {project.title}
-                </h3>
-                {project.link ? (
-                  <LinkPreviewBadge
-                    link={project.link}
-                    display="Visit"
-                    isBlocked={project.isBlocked}
-                  />
-                ) : (
-                  <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300">
-                    Deprecated
-                  </span>
-                )}
-              </div>
-              <p className="text-gray-400 text-sm mb-3">
-                {project.description}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map((tag, tagIndex) => (
-                  <span
-                    key={tagIndex}
-                    className="px-2 py-1 bg-gray-700/50 rounded-full text-xs text-gray-300"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
-    </div>
-  </PanelShell>
-);
+      {video && (
+        <VideoOverlay
+          youtubeId={video.id}
+          title={video.title}
+          onClose={() => setVideo(null)}
+        />
+      )}
+    </PanelShell>
+  );
+};
 
 export default ProjectsPanel;
