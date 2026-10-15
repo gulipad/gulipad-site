@@ -22,6 +22,7 @@ export async function GET(
     formatWritingDate(writing.date),
     `${writing.readingMinutes} min read`,
     `Written in ${writing.language}`,
+    ...(writing.label ? [writing.label] : []),
   ].join(" · ");
   const body = `# ${writing.title}\n\n> ${writing.description}\n\n${byline}\n\n${writing.body}`;
   return new Response(body, {
