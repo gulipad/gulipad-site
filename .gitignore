@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# videos live on YouTube; keep local renders out of git
+public/writings/**/*.mp4
+!public/writings/mila-launch-video/mila.mp4
+
+# private redaction patterns for scripts/export-claude-chat.py
+scripts/redactions.local.json

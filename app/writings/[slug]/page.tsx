@@ -5,6 +5,7 @@ import { Newsreader } from "next/font/google";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import Transcript from "@/components/Transcript";
 import { getWriting, getWritings } from "@/lib/writings";
 import { formatWritingDate, languageFlag } from "@/lib/writings-shared";
 
@@ -25,6 +26,7 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const writing = getWriting((await params).slug);
   if (!writing) return {};
+  const images = [writing.poster ?? "/og-image.png"];
   return {
     title: `${writing.title} — Guli Moreno`,
     description: writing.description,
@@ -34,13 +36,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: writing.description,
       url: `/writings/${writing.slug}`,
       type: "article",
-      images: ["/og-image.png"],
+      images,
     },
     twitter: {
       card: "summary_large_image",
       title: writing.title,
       description: writing.description,
-      images: ["/og-image.png"],
+      images,
     },
   };
 }
@@ -165,8 +167,31 @@ export default async function WritingPage({ params }: Props) {
             <span title={`Originally written in ${writing.language}`}>
               Written in {writing.language} {languageFlag(writing.language)}
             </span>
+            {writing.label && (
+              <span className="rounded-full border border-white/15 bg-white/[0.06] px-2.5 py-0.5 text-xs text-gray-300">
+                {writing.label}
+              </span>
+            )}
           </div>
         </header>
+
+        {writing.video && (
+          <figure className="mx-auto mt-12">
+            <video
+              src={writing.video}
+              poster={writing.poster}
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full rounded-xl border border-white/10 shadow-2xl"
+            />
+            {writing.videoCaption && (
+              <figcaption className="mt-3 text-center text-sm text-gray-500">
+                {writing.videoCaption}
+              </figcaption>
+            )}
+          </figure>
+        )}
 
         <div
           className="writing-prose prose prose-invert prose-lg mx-auto mt-12 max-w-2xl font-[family-name:var(--font-serif)]
@@ -186,6 +211,10 @@ export default async function WritingPage({ params }: Props) {
             {writing.body}
           </ReactMarkdown>
         </div>
+
+        {writing.transcript && (
+          <Transcript transcript={writing.transcript} date={writing.date} />
+        )}
 
         <footer className="mx-auto mt-20 max-w-2xl border-t border-white/10 pt-8 text-sm text-gray-500">
           {writing.original && (

@@ -1,6 +1,7 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
+import type { Transcript } from "@/lib/transcript-shared";
 import type { WritingMeta } from "@/lib/writings-shared";
 
 export type { WritingMeta };
@@ -11,6 +12,8 @@ const WORDS_PER_MINUTE = 265;
 
 export interface Writing extends WritingMeta {
   body: string; // markdown, without frontmatter
+  // the AI conversation behind the piece: <slug>.transcript.json, when present
+  transcript?: Transcript;
 }
 
 // Frontmatter is a flat block of `key: value` lines between `---` fences.
@@ -35,6 +38,10 @@ function parse(slug: string, raw: string): Writing {
     original: fields.original,
     originalLabel: fields.originalLabel,
     coauthors: fields.coauthors,
+    label: fields.label,
+    poster: fields.poster,
+    video: fields.video,
+    videoCaption: fields.videoCaption,
     readingMinutes: readingMinutes(body),
     body,
   };
@@ -51,7 +58,12 @@ function readingMinutes(markdown: string): number {
 
 export function getWriting(slug: string): Writing | undefined {
   try {
-    return parse(slug, readFileSync(join(WRITINGS_DIR, `${slug}.md`), "utf8"));
+    const writing = parse(slug, readFileSync(join(WRITINGS_DIR, `${slug}.md`), "utf8"));
+    const transcript = join(WRITINGS_DIR, `${slug}.transcript.json`);
+    if (existsSync(transcript)) {
+      writing.transcript = JSON.parse(readFileSync(transcript, "utf8")) as Transcript;
+    }
+    return writing;
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") return undefined;
     throw err;

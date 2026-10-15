@@ -379,6 +379,11 @@ const ProjectsPanel: React.FC<PanelProps & { writings: WritingMeta[] }> = ({
                       >
                         {languageFlag(writing.language)}
                       </span>
+                      {writing.label && (
+                        <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
+                          {writing.label}
+                        </span>
+                      )}
                     </div>
                   </Link>
                 ))}

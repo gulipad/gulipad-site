@@ -9,6 +9,10 @@ export interface WritingMeta {
   original?: string; // where it was first published
   originalLabel?: string;
   coauthors?: string;
+  label?: string; // shown as a tag, e.g. "AI-written, supervised"
+  poster?: string; // social preview image, and the video's poster frame
+  video?: string; // shown under the header
+  videoCaption?: string;
   readingMinutes: number;
 }
 
