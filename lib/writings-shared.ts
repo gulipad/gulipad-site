@@ -27,6 +27,14 @@ export function formatWritingDate(date: string): string {
   });
 }
 
+/** "12 min read", or "1h 45m read" for long ones. */
+export function formatReadingTime(minutes: number): string {
+  if (minutes < 60) return `${minutes} min read`;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return `${h}h${m ? ` ${m}m` : ""} read`;
+}
+
 const LANGUAGE_FLAGS: Record<string, string> = {
   English: "🇺🇸",
   Spanish: "🇪🇸",

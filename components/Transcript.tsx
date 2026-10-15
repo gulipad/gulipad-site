@@ -142,7 +142,7 @@ export default function Transcript({
     <section className="mx-auto mt-20 max-w-2xl border-t border-white/10 pt-12" aria-label="Transcript">
       <h2 className="mb-2 text-2xl font-semibold tracking-tight">The conversation</h2>
       <p className="text-sm text-white/40">
-        Unedited, apart from two small redactions. Times are Madrid time on {formatWritingDate(date)}.
+        Every prompt and reply as it happened (minus a couple of small redactions). Times are Madrid time on {formatWritingDate(date)}.
       </p>
       <div className="mt-4 flex flex-wrap gap-2 text-xs">
         {[

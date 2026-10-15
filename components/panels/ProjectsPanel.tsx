@@ -7,7 +7,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { Play } from "lucide-react";
 import VideoOverlay from "@/components/VideoOverlay";
-import { languageFlag, type WritingMeta } from "@/lib/writings-shared";
+import {
+  formatReadingTime,
+  languageFlag,
+  type WritingMeta,
+} from "@/lib/writings-shared";
 
 interface Project {
   title: string;
@@ -370,7 +374,7 @@ const ProjectsPanel: React.FC<PanelProps & { writings: WritingMeta[] }> = ({
                         {writing.date.slice(0, 4)}
                       </span>
                       <span className="px-2 py-1 bg-gray-700/50 rounded-full text-xs">
-                        {writing.readingMinutes} min read
+                        {formatReadingTime(writing.readingMinutes)}
                       </span>
                       <span
                         className="px-2 py-1 bg-gray-700/50 rounded-full text-xs leading-none"
