@@ -18,6 +18,7 @@ export interface Writing extends WritingMeta {
 
 // Frontmatter is a flat block of `key: value` lines between `---` fences.
 function parse(slug: string, raw: string): Writing {
+  const transcript = loadTranscript(slug);
   const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
   if (!match) throw new Error(`Writing "${slug}" is missing frontmatter`);
   const fields: Record<string, string> = {};
@@ -42,9 +43,22 @@ function parse(slug: string, raw: string): Writing {
     poster: fields.poster,
     video: fields.video,
     videoCaption: fields.videoCaption,
-    readingMinutes: readingMinutes(body),
+    // `readingMinutes` in the frontmatter overrides the estimate; otherwise
+    // the transcript is part of the piece, so it counts towards the read
+    readingMinutes: fields.readingMinutes
+      ? Number(fields.readingMinutes)
+      : readingMinutes(
+          [body, ...(transcript?.messages.map((m) => m.text) ?? [])].join("\n\n")
+        ),
     body,
+    transcript,
   };
+}
+
+function loadTranscript(slug: string): Transcript | undefined {
+  const path = join(WRITINGS_DIR, `${slug}.transcript.json`);
+  if (!existsSync(path)) return undefined;
+  return JSON.parse(readFileSync(path, "utf8")) as Transcript;
 }
 
 function readingMinutes(markdown: string): number {
@@ -58,12 +72,7 @@ function readingMinutes(markdown: string): number {
 
 export function getWriting(slug: string): Writing | undefined {
   try {
-    const writing = parse(slug, readFileSync(join(WRITINGS_DIR, `${slug}.md`), "utf8"));
-    const transcript = join(WRITINGS_DIR, `${slug}.transcript.json`);
-    if (existsSync(transcript)) {
-      writing.transcript = JSON.parse(readFileSync(transcript, "utf8")) as Transcript;
-    }
-    return writing;
+    return parse(slug, readFileSync(join(WRITINGS_DIR, `${slug}.md`), "utf8"));
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") return undefined;
     throw err;
@@ -77,7 +86,7 @@ export function getWritings(): WritingMeta[] {
     .map((f) => {
       const slug = f.replace(/\.md$/, "");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { body, ...meta } = parse(slug, readFileSync(join(WRITINGS_DIR, f), "utf8"));
+      const { body, transcript, ...meta } = parse(slug, readFileSync(join(WRITINGS_DIR, f), "utf8"));
       return meta;
     })
     .sort((a, b) => b.date.localeCompare(a.date));

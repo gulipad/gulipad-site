@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getWriting, getWritings } from "@/lib/writings";
-import { formatWritingDate } from "@/lib/writings-shared";
+import { formatReadingTime, formatWritingDate } from "@/lib/writings-shared";
 
 // Served at /writings/<slug>.md via the rewrite in next.config.ts.
 export const dynamic = "force-static";
@@ -20,7 +20,7 @@ export async function GET(
   const byline = [
     `By Guli Moreno${writing.coauthors ? ` & ${writing.coauthors}` : ""}`,
     formatWritingDate(writing.date),
-    `${writing.readingMinutes} min read`,
+    formatReadingTime(writing.readingMinutes),
     `Written in ${writing.language}`,
     ...(writing.label ? [writing.label] : []),
   ].join(" · ");

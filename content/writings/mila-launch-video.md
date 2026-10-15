@@ -1,50 +1,51 @@
 ---
 title: Making Mila's launch video with Claude Code
-description: One working day, one conversation, a 53-second animated launch film. Every prompt I sent and every reply I got, unedited.
+description: How I made Mila's launch video in a day with Claude Code, plus the full conversation - every prompt and every reply.
 date: 2026-10-05
 language: English
 label: AI-written, supervised
+readingMinutes: 45
 poster: /writings/mila-launch-video/poster.jpg
 video: /writings/mila-launch-video/mila.mp4
 videoCaption: The final version is a bit more polished. This is the video this chat generated.
 ---
 
-Capchase is launching Mila, our always-on AI deal desk, and it needed a launch film. Not a filmed one: the animated, product-UI kind that Attio, Rippling and Raycast put out. I made it in a single Claude Code session, written as code with [HyperFrames](https://hyperframes.heygen.com) (HTML and GSAP rendered to video), with music and sound effects from Epidemic Sound.
+We're launching Mila at Capchase, and I really wanted a launch video like the ones Attio, Rippling or Raycast put out - no cameras, just animated product UI, type and a great track. That's usually weeks of back and forth with a motion designer, so I wanted to see how far I could get with Claude Code and [HyperFrames](https://hyperframes.heygen.com), which lets you write a video as HTML and GSAP and render it to MP4.
 
-The film is going up on YouTube. Below is the whole conversation, from "go find me some launch videos" to the final render. I'm sharing it because people keep asking how I actually talk to these models, and the honest answer is easier to show than to describe. Here's what I'd point at.
+Turns out, quite far. The video above came out of this one conversation, which took about 8 and a half hours. A lot of people ask me how I actually talk to these models, so I decided to share the whole thing as it happened (I only redacted a couple of private links). Before that, here are some of the things that worked for me.
 
-## Make it look before you tell it anything
+## Start with references, not the brief
 
-The first prompt has no product context at all. I asked for research first: find recent animated launch videos and download them so I could rank them. Then I ranked them, said what I liked about each, and asked it to study them closely. Only then did the music come in, then the brand, then the blog post, then the script. By the time we wrote a single line, we had a shared taste to point back to.
+My first prompt has no context on the product at all. I asked Claude to find recent animated launch videos and download them, and then I ranked them myself and told it what I liked about each one. Only after that did I bring in the music, the brand, our blog post and, finally, the script. So, by the time we wrote the first line, we were both kind of looking at the same references.
 
-## Music first, then the picture
+## Music first
 
 > I think we should actually start with the music then, and then build the video on top. Otherwise sync becomes super complex.
 
-Everything after that is timed to the track: the drop lands on "Meet Mila", the logo lands on the final hit. When the edit drifted off the beat, that was the bug.
+Everything is timed to the track. The bass drop lands on "Meet Mila" and the logo lands on the last hit. Whenever something felt off, it was almost always because it had drifted off the beat.
 
-## Say exactly what's wrong, and exactly what's right
+## Be blunt, but say what works
 
-Most of my prompts are reviews. They're blunt ("sounds like a teletienda ad", "absolute AI slop", "cutre sound effects"), but they always name what's working too, so the next pass keeps it. The most useful prompts point at a moment that already feels right and ask for more of it:
+Most of my prompts are reviews, and to be truthful they're not very polite ("sounds like a teletienda ad", "absolute AI slop", "cutre sound effects"). However, I always try to point at what's working too, so it doesn't get thrown away in the next pass. My favorite prompts are the ones that point at something that's already right and ask for more of it:
 
 > The acceleration is still off. You know where it's perfect? When it zooms into the is broken words. Just apply the same one!
 
-## Lock in what's good
+## Commit what's good
 
-"Now it's perfect. Please commit." A commit is a save point I can come back to, and it tells the model what not to touch.
+"Now it's perfect. Please commit." Commits are save points - if the next iteration goes sideways, I can always go back. It's also a pretty clear signal to the model about what not to touch.
 
-## Steer while it works
+## Course-correct on the go
 
-Some messages went in while Claude was in the middle of a task (they're marked *sent mid-task*). They're small course corrections: "Attio is the perfect inspo for animation", "Don't focus so much on SFX for now". You don't have to wait for it to finish to change direction.
+You don't have to wait for it to finish. Some of my messages went in while Claude was still working (they're marked *sent mid-task* below), mostly small nudges like "Attio is the perfect inspo for animation" or "Don't focus so much on SFX for now".
 
-## Ask for its opinion, then let it run
+## Ask for its opinion
 
-When the second half stopped working, I didn't try to fix it scene by scene. I asked "What are we missing?", read the critique, and said "Give that a shot." Later: "If you have a better idea, let me know… gogogo".
+When the second half of the video stopped working, I didn't try to fix it scene by scene. I asked "What are we missing?", read what it came back with, and told it to give it a shot. Later on it was "If you have a better idea, let me know… gogogo". It may seem obvious, but it works surprisingly well.
 
-## Take the decisions that need taste
+## Keep the taste calls
 
-The sound effects I cared about, I picked myself and pasted the link. Same with the end-card tagline and the bits of script that carry the message. The model is fast at everything else.
+I picked the sound effects I cared about myself and pasted the links. Same with the tagline and the lines that carry the message. Claude is extremely fast at everything else, but I wanted those to be mine.
 
 ---
 
-The full transcript follows. My messages are on the right. Claude's replies are on the left, with a collapsed list of the tool calls it made behind each one.
+Below is the full transcript. My messages are on the right and Claude's are on the left. Each reply has a collapsed list of the tools it used, in case you're curious about what it was actually doing behind the scenes.

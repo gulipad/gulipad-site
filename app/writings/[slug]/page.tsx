@@ -7,7 +7,11 @@ import remarkGfm from "remark-gfm";
 
 import Transcript from "@/components/Transcript";
 import { getWriting, getWritings } from "@/lib/writings";
-import { formatWritingDate, languageFlag } from "@/lib/writings-shared";
+import {
+  formatReadingTime,
+  formatWritingDate,
+  languageFlag,
+} from "@/lib/writings-shared";
 
 const serif = Newsreader({
   subsets: ["latin"],
@@ -162,7 +166,7 @@ export default async function WritingPage({ params }: Props) {
               {formatWritingDate(writing.date)}
             </time>
             <span className="text-gray-600">·</span>
-            <span>{writing.readingMinutes} min read</span>
+            <span>{formatReadingTime(writing.readingMinutes)}</span>
             <span className="text-gray-600">·</span>
             <span title={`Originally written in ${writing.language}`}>
               Written in {writing.language} {languageFlag(writing.language)}
