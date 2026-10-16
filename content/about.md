@@ -19,7 +19,6 @@
 Co-founded in 2020. New York–based fintech providing capital and sales-acceleration tools to SaaS startups. Key milestones:
 
 - Around **$2B of capital lent** — thousands of years of combined runway extended for thousands of companies.
-- Over **$80M processed** in SaaS deals via Capchase Pay.
 - Around **100 employees** across 10 countries.
 
 Guli works on the Product team at Capchase.
