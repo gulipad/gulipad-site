@@ -52,7 +52,6 @@ const projects: Project[] = [
             We've lent ~$2B of capital to tech companies. That's tens of years
             of combined runway!
           </li>
-          <li>We've processed +$80M in SaaS deals through Capchase Pay.</li>
           <li>We employ +80 people in 10 countries.</li>
         </ul>
       </>
