@@ -22,6 +22,12 @@ const markdownComponents: Components = {
     ) : (
       <a href={href}>{children}</a>
     ),
+  // wide tables scroll inside their own box instead of widening the page on mobile
+  table: ({ children }) => (
+    <div className="my-4 overflow-x-auto">
+      <table className="my-0 min-w-[40rem]">{children}</table>
+    </div>
+  ),
 };
 
 // Wall-clock time in Madrid, where the chat happened.
