@@ -47,6 +47,7 @@ Active pre-seed and seed positions in: Sperid Labs, Arc Risk, Causa Prima, Mito,
 
 Long-running public projects include:
 
+- **La Biblioteca de Babel** — Borges's Library of Babel in Spanish, ordered by a 66M-parameter language model trained from scratch; every page lives at a fixed address (SvelteKit + WebAssembly).
 - **Kyriku 3D** — Gaussian Splat viewer documenting humanitarian work in Ngozi, Burundi (Next.js + PlayCanvas).
 - **A Good Date Picker** — Open-source React date picker with natural-language input via chrono-node and shadcn/ui.
 - **Flatten the Curve** — Streamlit notebook exploring virus spread. Reached the ProductHunt podium during COVID.

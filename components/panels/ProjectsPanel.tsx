@@ -120,6 +120,41 @@ const projects: Project[] = [
     ),
   },
   {
+    title: "La Biblioteca de Babel",
+    image: "babel.jpg",
+    tags: ["Weekend build", "LLM", "Borges"],
+    link: "https://babel.gulipad.com",
+    description: (
+      <>
+        <p className="mb-2">
+          Borges's Library of Babel in Spanish: every possible 3,200-character
+          page, ordered by a language model so that almost anything you open
+          reads as prose.
+        </p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>
+            A 66M-parameter model trained from scratch on 83k pages of
+            public-domain Spanish prose.
+          </li>
+          <li>
+            Arithmetic coding turns it into the map: an address is its page,
+            compressed, and ~7x shorter than in{" "}
+            <LinkPreviewBadge
+              link="https://libraryofbabel.info/"
+              display="Basile's library"
+            />
+            .
+          </li>
+          <li>
+            An integer-only engine in WebAssembly, so an address opens the same
+            page on any device. A static site, no server.
+          </li>
+          <li>Built over a weekend with Claude, for ~$15-20 of rented GPUs.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
     title: "Kyriku 3D",
     image: "kyriku.jpg",
     tags: ["Pro-bono", "3D", "Next.js"],
