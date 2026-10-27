@@ -173,10 +173,10 @@ const investments: Investment[] = [
     isBlocked: true,
   },
   {
-    title: "Arc Risk",
+    title: "Harbor",
     subtitle:
-      "Arc Risk is building an engine to price AI insurance.",
-    link: "https://arcrisk.ai/",
+      "Harbor is building an engine to price AI insurance.",
+    link: "https://harbor.ai/",
     tags: ["Seed Investment", "2026"],
     isBlocked: true,
   },
