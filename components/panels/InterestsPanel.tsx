@@ -71,12 +71,6 @@ const getPlatformVisual = (name: string) =>
 
 const articles: Article[] = [
   {
-    title: "Rented Virtue",
-    link: "https://minutes.substack.com/p/rented-virtue",
-    description:
-      "Why secular institutions can't sustain moral behavior without transcendent foundations",
-  },
-  {
     title: "Coda's Two-Way Writeups",
     link: "https://coda.io/@lshackleton/two-way-writeups-coda-s-secret-to-shipping-fast",
     description:
@@ -602,9 +596,15 @@ const people: Person[] = [
     link: "https://www.stephenwolfram.com/index.php.en",
     description: "Founder of Wolfram Research; creator of Mathematica.",
   },
+  {
+    name: "Will Manidis",
+    link: "https://minutes.substack.com/p/rented-virtue",
+    description:
+      "Founder & essayist. Start with Rented Virtue, on why secular institutions can't sustain virtue.",
+  },
 ];
 
-const LAST_UPDATED = "2026-10-01";
+const LAST_UPDATED = "2026-10-27";
 
 const InterestsPanel: React.FC<PanelProps> = (props) => (
   <PanelShell {...props} title="Random Stuff" lastUpdated={LAST_UPDATED}>
