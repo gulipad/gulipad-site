@@ -71,6 +71,12 @@ const getPlatformVisual = (name: string) =>
 
 const articles: Article[] = [
   {
+    title: "Rented Virtue",
+    link: "https://minutes.substack.com/p/rented-virtue",
+    description:
+      "Why secular institutions can't sustain moral behavior without transcendent foundations",
+  },
+  {
     title: "Coda's Two-Way Writeups",
     link: "https://coda.io/@lshackleton/two-way-writeups-coda-s-secret-to-shipping-fast",
     description:
