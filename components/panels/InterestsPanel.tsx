@@ -157,6 +157,14 @@ const articles: Article[] = [
 
 const investments: Investment[] = [
   {
+    title: "Xplore",
+    subtitle:
+      "Xplore is building high-fidelity RL environments and evals that teach AI to do real engineering work. Led by Lightspeed.",
+    link: "https://xplore.ai/",
+    tags: ["Pre-seed Investment", "2026"],
+    isBlocked: true,
+  },
+  {
     title: "Sperid Labs",
     subtitle:
       "Sperid Labs is building world models. Backed by Base10 and Pear VC.",
