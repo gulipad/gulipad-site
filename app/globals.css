@@ -6,7 +6,6 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --app-height: 100vh;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -93,6 +92,15 @@ html,
 body {
   height: 100%;
   overflow: hidden;
+  /* Dark canvas behind everything, so any gap while Safari's toolbars
+     animate in/out shows black instead of the light theme background. */
+  background-color: #000;
+}
+
+/* Full viewport height that tracks Safari's collapsing toolbars natively. */
+.h-app {
+  height: 100vh;
+  height: 100dvh;
 }
 
 .dark {
