@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 
 import Spinner from "@/components/Spinner";
-import { useViewport } from "@/lib/useViewport";
 
 type MemojiScrubberProps = {
   onLoaded?: () => void;
@@ -13,15 +12,7 @@ type MemojiScrubberProps = {
 };
 
 const TOTAL_FRAMES = 168;
-// Two resolutions of the same frames: 220px, and 420px for high-density
-// screens where the 220px set would be upscaled and look soft.
-const FRAME_PATH_SD = "/memoji-frames/frame-";
-const FRAME_PATH_HD = "/memoji-frames-420/frame-";
-const SD_FRAME_SIZE = 220;
-// Stop waiting after this long and show whatever frames arrived, so one
-// stalled request on a bad connection can't keep the whole page hidden.
-const LOAD_TIMEOUT_MS = 10000;
-
+const FRAME_PATH = "/memoji-frames/frame-";
 // Default frame (zero-indexed 130 corresponds to frame 131)
 const DEFAULT_FRAME = 130;
 
@@ -31,9 +22,7 @@ export default function MemojiScrubber({
   paused = false,
 }: MemojiScrubberProps) {
   const [allFramesLoaded, setAllFramesLoaded] = useState(false);
-  const { isMobile, isCompact, isShort } = useViewport();
-  const [pixelRatio, setPixelRatio] = useState<number | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   // Animation state lives in refs: the spring runs every frame, and routing it
@@ -41,10 +30,9 @@ export default function MemojiScrubber({
   const frameRef = useRef(DEFAULT_FRAME);
   const targetFrameRef = useRef(DEFAULT_FRAME);
   const velocityRef = useRef(0);
-  const drawnRef = useRef<{ canvas: HTMLCanvasElement | null; frame: number }>({
-    canvas: null,
-    frame: -1,
-  });
+  const drawnRef = useRef<{ canvas: HTMLCanvasElement | null; frame: number }>(
+    { canvas: null, frame: -1 }
+  );
   // Cursor distance from screen center; governs how strongly we pull toward
   // targetFrame. Starts at Infinity so behavior is normal before first move.
   const radiusRef = useRef(Infinity);
@@ -52,76 +40,52 @@ export default function MemojiScrubber({
   const onLoadedRef = useRef(onLoaded);
   onLoadedRef.current = onLoaded;
 
-  // Screen pixel density (re-read on resize: zooming or moving the window
-  // to another display changes it).
+  // Check for mobile screen size
   useEffect(() => {
-    const checkPixelRatio = () =>
-      setPixelRatio(Math.min(window.devicePixelRatio || 1, 3));
-    checkPixelRatio();
-    window.addEventListener("resize", checkPixelRatio);
-    return () => window.removeEventListener("resize", checkPixelRatio);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Get responsive canvas size (CSS pixels), and the backing-store size in
-  // device pixels so the drawing stays sharp on Retina screens.
-  const canvasSize = isShort
-    ? 100
-    : isMobile
-      ? isCompact
-        ? 100
-        : 140
-      : isCompact
-        ? 140
-        : 220;
-  const backingSize = Math.round(canvasSize * (pixelRatio ?? 1));
-  // Picked once, on mount: swapping sets later would refetch every frame.
-  const [frameSet, setFrameSet] = useState<string | null>(null);
-  useEffect(() => {
-    if (pixelRatio != null && frameSet == null) {
-      setFrameSet(backingSize > SD_FRAME_SIZE ? FRAME_PATH_HD : FRAME_PATH_SD);
-    }
-  }, [pixelRatio, backingSize, frameSet]);
+  // Get responsive canvas size
+  const canvasSize = isMobile ? 140 : 220;
 
-  // Preload all images once and store them in imagesRef. A frame that fails
-  // to load is skipped rather than blocking the page.
+  // Preload all images once and store them in imagesRef.
   useEffect(() => {
-    if (!frameSet) return;
     let cancelled = false;
-    let finished = false;
     const images: HTMLImageElement[] = [];
-    const finish = () => {
-      if (cancelled || finished) return;
-      finished = true;
-      clearTimeout(timeoutId);
-      imagesRef.current = images;
-      setAllFramesLoaded(true);
-      onLoadedRef.current?.();
-    };
-    const timeoutId = setTimeout(finish, LOAD_TIMEOUT_MS);
     const promises = [];
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const padded = String(i).padStart(3, "0");
-      const src = `${frameSet}${padded}.webp`;
+      const src = `${FRAME_PATH}${padded}.webp`;
       const img = new Image();
       img.decoding = "async";
       promises.push(
-        new Promise<void>((resolve) => {
+        new Promise<void>((resolve, reject) => {
           img.onload = () => resolve();
-          img.onerror = () => {
-            console.error(`Failed to load ${src}`);
-            resolve();
-          };
-        }),
+          img.onerror = () => reject(new Error(`Failed to load ${src}`));
+        })
       );
       img.src = src;
       images.push(img);
     }
-    Promise.all(promises).then(finish);
+    Promise.all(promises)
+      .then(() => {
+        if (cancelled) return;
+        imagesRef.current = images;
+        setAllFramesLoaded(true);
+        onLoadedRef.current?.();
+      })
+      .catch((err) => console.error(err));
     return () => {
       cancelled = true;
-      clearTimeout(timeoutId);
     };
-  }, [frameSet]);
+  }, []);
 
   // Animation loop: critically-damped spring toward targetFrame, with a
   // deadband near the radial center where atan2 is unstable. Draws straight
@@ -139,7 +103,7 @@ export default function MemojiScrubber({
       const frameIndex = Math.round(frameRef.current) % TOTAL_FRAMES;
       const drawn = drawnRef.current;
       if (drawn.canvas === canvas && drawn.frame === frameIndex) return;
-      const img = nearestLoadedFrame(imagesRef.current, frameIndex);
+      const img = imagesRef.current[frameIndex];
       const ctx = canvas.getContext("2d");
       if (!img || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -167,8 +131,7 @@ export default function MemojiScrubber({
           STIFFNESS * diff * pullWeight - DAMPING * velocityRef.current;
         velocityRef.current += accel * dt;
         const next = prev + velocityRef.current * dt;
-        frameRef.current =
-          ((next % TOTAL_FRAMES) + TOTAL_FRAMES) % TOTAL_FRAMES;
+        frameRef.current = ((next % TOTAL_FRAMES) + TOTAL_FRAMES) % TOTAL_FRAMES;
       }
 
       draw();
@@ -179,15 +142,11 @@ export default function MemojiScrubber({
     return () => cancelAnimationFrame(animationFrameId);
   }, [paused]);
 
-  // Update targetFrame based on mouse or touch position, measured from the
-  // memoji itself (on phones it sits well above the middle of the screen).
+  // Update targetFrame based on mouse or touch position.
   useEffect(() => {
     const updateFrame = (clientX: number, clientY: number) => {
-      const rect = containerRef.current?.getBoundingClientRect();
-      const centerX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
-      const centerY = rect
-        ? rect.top + rect.height / 2
-        : window.innerHeight / 2;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
       const dx = clientX - centerX;
       const dy = clientY - centerY;
       radiusRef.current = Math.hypot(dx, dy);
@@ -216,20 +175,15 @@ export default function MemojiScrubber({
 
   // Render: always reserve a canvasSize×canvasSize container.
   return (
-    <div
-      ref={containerRef}
-      className="relative"
-      style={{ width: canvasSize, height: canvasSize }}
-    >
+    <div className="relative" style={{ width: canvasSize, height: canvasSize }}>
       {displayMemoji ? (
         allFramesLoaded ? (
           <motion.canvas
             // Remount on resize so the loop redraws onto the fresh canvas.
-            key={backingSize}
+            key={canvasSize}
             ref={canvasRef}
-            width={backingSize}
-            height={backingSize}
-            style={{ width: canvasSize, height: canvasSize }}
+            width={canvasSize}
+            height={canvasSize}
             className="select-none"
             initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -246,20 +200,4 @@ export default function MemojiScrubber({
       )}
     </div>
   );
-}
-
-// The frame at `index`, or the closest one that actually loaded.
-function nearestLoadedFrame(
-  images: HTMLImageElement[],
-  index: number,
-): HTMLImageElement | undefined {
-  const isLoaded = (img?: HTMLImageElement) =>
-    !!img && img.complete && img.naturalWidth > 0;
-  for (let offset = 0; offset <= images.length / 2; offset++) {
-    const after = images[(index + offset) % images.length];
-    if (isLoaded(after)) return after;
-    const before = images[(index - offset + images.length) % images.length];
-    if (isLoaded(before)) return before;
-  }
-  return undefined;
 }

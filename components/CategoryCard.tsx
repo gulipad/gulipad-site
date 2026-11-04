@@ -121,15 +121,14 @@ export default function CategoryCard({
     : { type: "button" as const, onClick };
 
   return (
-    // Positioning lives on this plain wrapper: motion writes its own
-    // `transform` on the animated element below, which used to wipe out the
-    // translate(-50%, -50%) and left every card half a card off its spot.
+    // Cards are anchored by their top-left corner at (x, y). The angles and
+    // distances in Home.tsx were tuned for that anchoring (the ring is
+    // deliberately lopsided), so don't "centre" them with a translate.
     <div
       style={{
         position: useFloatingPosition ? "absolute" : "relative",
         top: useFloatingPosition ? `calc(50% + ${y})` : "auto",
         left: useFloatingPosition ? `calc(50% + ${x})` : "auto",
-        transform: useFloatingPosition ? "translate(-50%, -50%)" : "none",
         zIndex: hover ? 10 : 1, // Ensure hovered cards are on top
       }}
     >
