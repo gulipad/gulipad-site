@@ -100,7 +100,7 @@ export const metadata: Metadata = {
     title: "Hi, this is Guli",
     description: "Gulipad's home page for you to explore.",
     images: ["/og-image.png"], // Path relative to the /public directory
-    creator: "@gulipad", // Your Twitter handle
+    creator: "@GuliMoreno", // Your X handle
   },
 };
 
