@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { motion } from "motion/react";
 
 import MemojiScrubber from "@/components/MemojiScrubber";
@@ -9,30 +9,27 @@ import AboutMePanel from "@/components/panels/AboutMePanel";
 import InterestsPanel from "@/components/panels/InterestsPanel";
 import ProjectsPanel from "@/components/panels/ProjectsPanel";
 import type { WritingMeta } from "@/lib/writings-shared";
+import { useViewport } from "@/lib/useViewport";
 
 export default function Home({ writings }: { writings: WritingMeta[] }) {
   const [memojiLoaded, setMemojiLoaded] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  // `mounted` stays false until the screen has been measured, so the page
+  // never renders one layout and then swaps to the other (which restarted
+  // the intro typing on phones).
+  const { measured: mounted, isMobile } = useViewport();
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [previousPanel, setPreviousPanel] = useState<string | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
-  const mainRef = useRef<HTMLDivElement>(null);
 
   // Define the navigation sections
   const sections = useMemo(() => ["Projects", "About", "Interests"], []);
-
-  // Handle mounting to prevent hydration mismatches
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Deep link into a section, e.g. /?section=interests from a writing page.
   useEffect(() => {
     const param = new URLSearchParams(window.location.search).get("section");
     const match = sections.find(
-      (s) => s.toLowerCase() === param?.toLowerCase()
+      (s) => s.toLowerCase() === param?.toLowerCase(),
     );
     if (match) setActivePanel(match);
   }, [sections]);
@@ -92,48 +89,6 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigateToNext, navigateToPrevious]);
 
-  // Check for mobile screen size on mount and window resize
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // Standard mobile breakpoint
-    };
-
-    // Check on mount
-    checkMobile();
-
-    // Listen for resize events
-    window.addEventListener("resize", checkMobile);
-
-    // Clean up
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Fix for mobile viewport issues
-  useEffect(() => {
-    // Function to set the correct viewport height
-    const setViewportHeight = () => {
-      if (mainRef.current) {
-        // Set a custom CSS property based on the actual window inner height
-        document.documentElement.style.setProperty(
-          "--app-height",
-          `${window.innerHeight}px`
-        );
-      }
-    };
-
-    // Initial set
-    setViewportHeight();
-
-    // Update on resize and orientation change
-    window.addEventListener("resize", setViewportHeight);
-    window.addEventListener("orientationchange", setViewportHeight);
-
-    return () => {
-      window.removeEventListener("resize", setViewportHeight);
-      window.removeEventListener("orientationchange", setViewportHeight);
-    };
-  }, []);
-
   const stablePauseAfter = useMemo(() => ({ ",": 350 }), []);
   const handleComplete = useCallback(() => setIntroComplete(true), []);
   const handleMemojiLoaded = useCallback(() => setMemojiLoaded(true), []);
@@ -152,17 +107,16 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
     }
 
     if (isMobile) {
-      // Mobile layout - simple order: external links, then interactive items
+      // Mobile layout - interactive items on top, external links below
       return [
-        // Top row - external links
+        // Bottom row - external links
         {
           title: "Github",
           emoji: "github",
           linkUrl: "https://github.com/gulipad",
           angle: 0,
           distance: 0,
-          gridPosition: undefined,
-          mobileSection: "top",
+          mobileSection: "bottom",
           delay: 200,
           primaryColor: "255,99,71",
           secondaryColor: "255,127,80",
@@ -173,13 +127,12 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
           linkUrl: "https://x.com/GuliMoreno",
           angle: 0,
           distance: 0,
-          gridPosition: undefined,
-          mobileSection: "top",
+          mobileSection: "bottom",
           delay: 1000,
           primaryColor: "255,0,150",
           secondaryColor: "0,255,255",
         },
-        // Bottom row - interactive items
+        // Top row - interactive items
         {
           title: "Projects",
           emoji: "hammer-and-wrench",
@@ -187,8 +140,7 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
             setActivePanel((prev) => (prev === "Projects" ? null : "Projects")),
           angle: 0,
           distance: 0,
-          gridPosition: undefined,
-          mobileSection: "bottom",
+          mobileSection: "top",
           delay: 600,
           primaryColor: "0,123,255",
           secondaryColor: "0,200,255",
@@ -200,8 +152,7 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
             setActivePanel((prev) => (prev === "About" ? null : "About")),
           angle: 0,
           distance: 0,
-          gridPosition: undefined,
-          mobileSection: "bottom",
+          mobileSection: "top",
           delay: 800,
           primaryColor: "34,139,34",
           secondaryColor: "50,205,50",
@@ -211,12 +162,11 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
           emoji: "thinking",
           onClick: () =>
             setActivePanel((prev) =>
-              prev === "Interests" ? null : "Interests"
+              prev === "Interests" ? null : "Interests",
             ),
           angle: 0,
           distance: 0,
-          gridPosition: undefined,
-          mobileSection: "bottom",
+          mobileSection: "top",
           delay: 400,
           primaryColor: "138,43,226",
           secondaryColor: "186,85,211",
@@ -231,7 +181,6 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
           linkUrl: "https://github.com/gulipad",
           angle: 180,
           distance: 40,
-          gridPosition: undefined,
           mobileSection: undefined,
           delay: 200,
           primaryColor: "255,99,71",
@@ -244,7 +193,6 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
             setActivePanel((prev) => (prev === "Projects" ? null : "Projects")),
           angle: 270,
           distance: 40,
-          gridPosition: undefined,
           mobileSection: undefined,
           delay: 600,
           primaryColor: "0,123,255",
@@ -257,7 +205,6 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
             setActivePanel((prev) => (prev === "About" ? null : "About")),
           angle: 320,
           distance: 45,
-          gridPosition: undefined,
           mobileSection: undefined,
           delay: 800,
           primaryColor: "34,139,34",
@@ -269,7 +216,6 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
           linkUrl: "https://x.com/GuliMoreno",
           angle: 0,
           distance: 35,
-          gridPosition: undefined,
           mobileSection: undefined,
           delay: 1000,
           primaryColor: "255,0,150",
@@ -280,11 +226,10 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
           emoji: "thinking",
           onClick: () =>
             setActivePanel((prev) =>
-              prev === "Interests" ? null : "Interests"
+              prev === "Interests" ? null : "Interests",
             ),
           angle: 220,
           distance: 50,
-          gridPosition: undefined,
           mobileSection: undefined,
           delay: 400,
           primaryColor: "138,43,226",
@@ -295,11 +240,7 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
   }, [isMobile, mounted]);
 
   return (
-    <main
-      ref={mainRef}
-      className="relative w-screen bg-black flex flex-col items-center justify-center overflow-hidden"
-      style={{ height: "var(--app-height, 100vh)" }}
-    >
+    <main className="relative h-app w-screen bg-black flex flex-col items-center justify-center overflow-hidden">
       {/* Background effect */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
@@ -315,7 +256,7 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
       {/* Cards */}
       {mounted &&
         !isMobile &&
-        cardConfigs.map((config, index) => (
+        cardConfigs.map((config) => (
           <CategoryCard
             key={config.title}
             title={config.title}
@@ -324,7 +265,6 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
             linkUrl={config.linkUrl}
             angle={config.angle}
             distance={config.distance}
-            gridPosition={config.gridPosition}
             isVisible={showCard}
             paused={panelOpen}
             delay={config.delay}
@@ -335,12 +275,14 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
 
       {/* Mobile Grid Layout */}
       {mounted && isMobile && (
-        <div className="flex flex-col items-center justify-center h-full py-8">
-          {/* Top Section - External Links */}
-          <div className="flex justify-center space-x-12 mb-20">
+        // Gaps shrink with the screen height, and the bottom padding keeps the
+        // last row's labels clear of the footer on short phones.
+        <div className="flex flex-col items-center justify-center h-full pt-6 pb-20">
+          {/* Top Section - Interactive Items (the main content comes first) */}
+          <div className="flex justify-center space-x-10 mb-[clamp(2.5rem,9dvh,5rem)]">
             {cardConfigs
               .filter((config) => config.mobileSection === "top")
-              .map((config, index) => (
+              .map((config) => (
                 <CategoryCard
                   key={config.title}
                   title={config.title}
@@ -349,7 +291,6 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
                   linkUrl={config.linkUrl}
                   angle={0}
                   distance={0}
-                  gridPosition={undefined}
                   isVisible={showCard}
                   paused={panelOpen}
                   delay={config.delay}
@@ -360,7 +301,7 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
           </div>
 
           {/* Center Section - Content */}
-          <div className="flex flex-col items-center justify-center mb-12">
+          <div className="flex flex-col items-center justify-center mb-[clamp(1.5rem,5dvh,3rem)]">
             {/* Intro text */}
             <IntroBox
               text="Hi, this is Guli"
@@ -380,11 +321,11 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
             </div>
           </div>
 
-          {/* Bottom Section - Interactive Items */}
+          {/* Bottom Section - External Links */}
           <div className="flex justify-center space-x-10">
             {cardConfigs
               .filter((config) => config.mobileSection === "bottom")
-              .map((config, index) => (
+              .map((config) => (
                 <CategoryCard
                   key={config.title}
                   title={config.title}
@@ -393,7 +334,6 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
                   linkUrl={config.linkUrl}
                   angle={0}
                   distance={0}
-                  gridPosition={undefined}
                   isVisible={showCard}
                   paused={panelOpen}
                   delay={config.delay}
@@ -406,7 +346,7 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
       )}
 
       {/* Desktop layout: content in center */}
-      {!isMobile && (
+      {mounted && !isMobile && (
         <div className="relative flex flex-col items-center justify-center">
           {/* Intro text */}
           <IntroBox
@@ -418,7 +358,7 @@ export default function Home({ writings }: { writings: WritingMeta[] }) {
           />
 
           {/* MemojiScrubber */}
-          <div className="mt-8">
+          <div className="mt-[clamp(1rem,4dvh,2rem)]">
             <MemojiScrubber
               onLoaded={handleMemojiLoaded}
               displayMemoji={introComplete}

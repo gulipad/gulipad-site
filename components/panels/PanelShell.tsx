@@ -106,7 +106,7 @@ const PanelShell: React.FC<PanelShellProps> = ({
       }}
     >
       <motion.div
-        className="relative w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] bg-black/50 backdrop-blur-xl
+        className="relative w-[calc(100vw-2rem)] h-[calc(100dvh-2rem)] bg-black/50 backdrop-blur-xl
                    bg-gradient-to-br from-black/60 to-gray-900/60 text-white rounded-xl
                    border border-white/20 shadow-2xl overflow-y-auto z-10 isolate m-4"
         initial={{
