@@ -47,7 +47,9 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
   // Handle scroll/gesture events
   useEffect(() => {
     function handleScrollOrGesture() {
-      hidePreviewImmediately();
+      setShowPreview(false);
+      setIsLoaded(false);
+      setLoadError(isBlocked);
     }
 
     if (showPreview) {
@@ -67,7 +69,7 @@ const LinkPreviewBadge: React.FC<LinkPreviewBadgeProps> = ({
       window.removeEventListener("wheel", handleScrollOrGesture);
       window.removeEventListener("touchmove", handleScrollOrGesture);
     };
-  }, [showPreview]);
+  }, [showPreview, isBlocked]);
 
   function handleMouseEnter(e: React.MouseEvent<HTMLSpanElement>) {
     setShowPreview(true);
