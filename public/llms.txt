@@ -27,3 +27,4 @@
 
 - [A Story on Culture](https://www.gulipad.com/writings/a-story-on-culture.md): How Capchase's culture and values evolved during hypergrowth (2021, English)
 - [The Exponential Manifesto](https://www.gulipad.com/writings/exponential-manifesto.md): Thesis behind the Exponential Fellowship — exceptional people, exceptional experiences (2023, English)
+- [No tienen que volver](https://www.gulipad.com/writings/no-tienen-que-volver.md): Why Spain's best technical talent should go to the frontier — a history of the pensionados, whose job is not to return but to give back (2026, Spanish)
